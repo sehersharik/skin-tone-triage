@@ -1,0 +1,23 @@
+# Data and images are never committed (SCIN images stay in the bucket)
+data/raw/
+data/processed/
+*.png.part
+*.jpg.part
+
+# Run logs: keep only summaries
+runs/*
+!runs/README.md
+!runs/summaries/
+
+# Model weights
+*.pt
+*.pth
+*.ckpt
+
+# Python / tooling
+.venv/
+__pycache__/
+*.pyc
+.pytest_cache/
+.ipynb_checkpoints/
+.DS_Store

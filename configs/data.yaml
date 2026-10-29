@@ -1,0 +1,27 @@
+# Data download and exploration settings for the SCIN dataset.
+# Source: https://github.com/google-research-datasets/scin (SCIN Data Use License)
+
+seed: 42
+
+scin:
+  # Public GCS bucket and paths, as given in the official scin_demo.ipynb
+  gcp_project: dx-scin-public
+  bucket: dx-scin-public-data
+  csv_files:
+    - dataset/scin_cases.csv
+    - dataset/scin_labels.csv
+    - dataset/scin_app_questions.csv
+    - dataset/scin_label_questions.csv
+  image_path_columns: [image_1_path, image_2_path, image_3_path]
+
+paths:
+  raw_dir: data/raw/scin          # bucket paths are mirrored under this folder
+  runs_dir: runs
+
+download:
+  # all    : every image referenced in scin_cases.csv (~10.4k files, ~12.6 GB)
+  # sample : a seeded random sample of `sample_size` images (for local EDA)
+  # none   : CSV metadata only
+  images: sample
+  sample_size: 200
+  num_workers: 16

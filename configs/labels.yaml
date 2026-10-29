@@ -1,0 +1,32 @@
+# Phase 2: label selection and case-level splits (decisions approved by the owner).
+
+seed: 42
+
+paths:
+  raw_dir: data/raw/scin
+  processed_csv: data/processed/cases.csv
+  split_counts_csv: reports/split_counts.csv
+  runs_dir: runs
+
+# Each kept class lists the SCIN condition names (weighted-label names) mapped to it.
+# Cases whose primary condition is not listed here are dropped.
+classes:
+  dermatitis: [Eczema, Allergic Contact Dermatitis]
+  urticaria: [Urticaria]
+  insect_bite: [Insect Bite]
+  folliculitis: [Folliculitis]
+  psoriasis: [Psoriasis]
+  tinea: [Tinea]
+
+# Tied top conditions: keep the case only if every tied condition maps to the same
+# kept class. No minimum label weight; the weight is recorded for later checks.
+
+# Image files listed in scin_cases.csv but absent from the bucket (SCIN issue #1)
+missing_images:
+  - dataset/images/-2243186711511406658.png
+
+split:
+  test_size: 0.2        # held out once, scored once at the end
+  n_cv_folds: 5         # grouped, stratified CV on the remaining 80%
+  # Stratify on class x eFST group (missing eFST is its own stratum).
+  # Cases that share any image file form one group and never cross splits.
