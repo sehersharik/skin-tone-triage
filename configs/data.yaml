@@ -17,9 +17,11 @@ scin:
 paths:
   raw_dir: data/raw/scin          # bucket paths are mirrored under this folder
   runs_dir: runs
+  cases_csv: data/processed/cases.csv   # used by `images: used`
 
 download:
   # all    : every image referenced in scin_cases.csv (~10.4k files, ~12.6 GB)
+  # used   : only images of the kept cases in cases.csv (~2.5k files, ~2.9 GB)
   # sample : a seeded random sample of `sample_size` images (for local EDA)
   # none   : CSV metadata only
   images: sample

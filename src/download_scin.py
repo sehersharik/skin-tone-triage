@@ -10,7 +10,7 @@ in scin_cases.csv can be joined onto raw_dir directly.
 
 Usage:
     python -m src.download_scin --config configs/data.yaml
-    python -m src.download_scin --config configs/data.yaml --images all
+    python -m src.download_scin --config configs/data.yaml --images used   # after build_metadata
 """
 import argparse
 from concurrent.futures import ThreadPoolExecutor
@@ -20,6 +20,7 @@ import pandas as pd
 from google.cloud import storage
 from tqdm import tqdm
 
+from src.data import case_images
 from src.utils import load_config, save_metrics, set_seed, start_run
 
 
@@ -45,7 +46,7 @@ def image_paths_from_cases(cases_csv, path_columns):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--config", required=True)
-    parser.add_argument("--images", choices=["all", "sample", "none"],
+    parser.add_argument("--images", choices=["all", "used", "sample", "none"],
                         help="override download.images from the config")
     args = parser.parse_args()
 
@@ -71,6 +72,12 @@ def main():
     all_paths = image_paths_from_cases(cases_csv, scin["image_path_columns"])
     if dl["images"] == "all":
         wanted = all_paths
+    elif dl["images"] == "used":
+        cases_csv_used = Path(config["paths"]["cases_csv"])
+        if not cases_csv_used.exists():
+            raise SystemExit(f"{cases_csv_used} not found: run src.build_metadata first")
+        cases = pd.read_csv(cases_csv_used, dtype={"case_id": str})
+        wanted = sorted(case_images(cases).image_path.unique())
     elif dl["images"] == "sample":
         wanted = sorted(pd.Series(all_paths)
                         .sample(n=min(dl["sample_size"], len(all_paths)),

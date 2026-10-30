@@ -1,0 +1,47 @@
+# Phase 3 baseline: EfficientNet-B0, no augmentation, 5-fold grouped CV on the CV pool.
+# The test set is never loaded by train.py or evaluate.py in CV mode.
+
+experiment: baseline
+seed: 42
+
+paths:
+  raw_dir: data/raw/scin
+  cases_csv: data/processed/cases.csv
+  split_fingerprint: reports/split_fingerprint.txt
+  image_cache_dir: data/processed/images_256
+  runs_dir: runs
+  predictions_csv: reports/predictions/baseline_oof.csv
+  fold_outputs_dir: reports/predictions/baseline_folds   # each finished fold is saved here; reruns resume
+  train_log_json: reports/baseline_train_log.json
+  metrics_json: reports/metrics.json
+  figures_dir: docs/figures
+
+images:
+  cache_short_side: 256          # images are resized once and cached at this size
+  input_size: 224                # resize short side to 224, then centre crop 224x224
+  mean: [0.485, 0.456, 0.406]    # ImageNet normalisation
+  std: [0.229, 0.224, 0.225]
+  augmentation: none             # Phase 5 compares augmentation options
+
+model:
+  name: efficientnet_b0
+  pretrained: true               # torchvision ImageNet weights (IMAGENET1K_V1)
+
+train:
+  batch_size: 32
+  lr: 3.0e-4
+  weight_decay: 1.0e-4
+  class_weighted_loss: true      # weight_c = n_images / (n_classes * n_images_c)
+  scheduler: cosine              # cosine decay over the full epoch budget, per batch
+  # Epoch budget: if `epochs` is null, each candidate is trained on the folds
+  # other than `budget_fold` and scored on `budget_fold` (case-level balanced
+  # accuracy). The best budget is then used, unchanged, for all 5 folds.
+  epochs: null
+  candidate_epochs: [5, 10, 15, 20]
+  budget_fold: 0                 # cv_fold 0 = "fold 1"
+  num_workers: 4
+  device: auto                   # cuda if available, else mps, else cpu
+
+evaluation:
+  n_bootstrap: 2000
+  ci_level: 0.95

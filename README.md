@@ -3,7 +3,7 @@
 Classifies common skin conditions from photos with a fine-tuned CNN, explains predictions with Grad-CAM,
 and reports how performance varies across skin tones. Educational project, not a medical device.
 
-**Status:** Phase 2 (labels and splits) done. Results, method and limitations will be written up in Phase 8.
+**Status:** Phase 3 (baseline) in progress. Results, method and limitations will be written up in Phase 8.
 
 ## Setup
 
@@ -22,8 +22,8 @@ SCIN is downloaded from its public Google Cloud Storage bucket using the method 
 # CSVs + a 200-image random sample (enough for the EDA on a laptop)
 python -m src.download_scin --config configs/data.yaml
 
-# CSVs + all ~10.4k images (~12.6 GB), e.g. on Kaggle/Colab
-python -m src.download_scin --config configs/data.yaml --images all
+# After building labels and splits (below): only the ~2.5k images of the kept cases (~2.9 GB)
+python -m src.download_scin --config configs/data.yaml --images used
 ```
 
 Each run logs its config and a summary to `runs/<timestamp>_download_scin/`.
@@ -36,6 +36,19 @@ python -m src.build_metadata --config configs/labels.yaml
 
 Writes `data/processed/cases.csv` (one row per case: class, skin-tone groups, split, CV fold) and
 `reports/split_counts.csv`.
+
+## Train and evaluate the baseline (GPU; see `notebooks/kaggle_colab_runner.ipynb`)
+
+```bash
+python -m src.prepare_images --config configs/baseline.yaml   # resize once, cache
+python -m src.train --config configs/baseline.yaml            # 5-fold CV, out-of-fold predictions
+python -m src.evaluate --config configs/baseline.yaml         # metrics + CIs -> reports/metrics.json
+```
+
+The test set is not used by any of these steps.
+
+Each finished fold is saved to `reports/predictions/baseline_folds/` (or `--fold-outputs-dir`); rerunning
+`src.train` after an interruption skips the saved folds and gives the same results.
 
 ## Explore
 

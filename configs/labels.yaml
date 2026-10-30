@@ -6,6 +6,7 @@ paths:
   raw_dir: data/raw/scin
   processed_csv: data/processed/cases.csv
   split_counts_csv: reports/split_counts.csv
+  split_fingerprint: reports/split_fingerprint.txt
   runs_dir: runs
 
 # Each kept class lists the SCIN condition names (weighted-label names) mapped to it.

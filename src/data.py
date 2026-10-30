@@ -13,6 +13,7 @@ Definitions used here (EDA defaults, to be confirmed in Phase 2):
   half up (e.g. FST2 + FST3 -> 3).
 """
 import ast
+import hashlib
 from pathlib import Path
 
 import numpy as np
@@ -134,6 +135,25 @@ def add_eda_columns(df):
     df["monk_india"] = df["monk_skin_tone_label_india"]
     df["monk_us_group"] = df["monk_us"].map(MONK_GROUPS)
     return df
+
+
+def split_fingerprint(cases):
+    """SHA-256 of the sorted (case_id, label, split, cv_fold) rows.
+
+    Saved in reports/ when the splits are built; training checks it so a
+    machine with different library versions cannot silently use other splits.
+    """
+    rows = cases[["case_id", "label", "split", "cv_fold"]].astype(str)
+    text = "\n".join(sorted(",".join(r) for r in rows.itertuples(index=False)))
+    return hashlib.sha256(text.encode()).hexdigest()
+
+
+def case_images(cases):
+    """One row per image of the processed cases: case_id, image_path."""
+    images = cases.melt(id_vars="case_id", value_vars=IMAGE_PATH_COLUMNS,
+                        value_name="image_path").dropna(subset=["image_path"])
+    return images[["case_id", "image_path"]].sort_values(["case_id", "image_path"],
+                                                          ignore_index=True)
 
 
 def image_table(df):

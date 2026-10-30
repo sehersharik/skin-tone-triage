@@ -21,3 +21,6 @@ __pycache__/
 .pytest_cache/
 .ipynb_checkpoints/
 .DS_Store
+
+# Case-level predictions (one row per SCIN case) stay out of git
+reports/predictions/

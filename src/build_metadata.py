@@ -19,7 +19,7 @@ from sklearn.model_selection import StratifiedGroupKFold
 
 from src.data import (IMAGE_PATH_COLUMNS, WEIGHTED_LABEL_COLUMN, add_eda_columns,
                       assign_class, duplicate_groups, image_table, load_scin,
-                      parse_weighted_label, top_conditions)
+                      parse_weighted_label, split_fingerprint, top_conditions)
 from src.utils import load_config, save_metrics, set_seed, start_run
 
 EFST_MISSING = "eFST missing"
@@ -96,6 +96,8 @@ def split_counts(df):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--config", required=True)
+    parser.add_argument("--update-fingerprint", action="store_true",
+                        help="accept new splits (only after an intended label/split change)")
     args = parser.parse_args()
 
     config = load_config(args.config)
@@ -123,6 +125,15 @@ def main():
     out.parent.mkdir(parents=True, exist_ok=True)
     kept[OUTPUT_COLUMNS].sort_values(["split", "cv_fold", "case_id"]).to_csv(out, index=False)
 
+    # The committed fingerprint pins the splits: a different machine or library
+    # version must reproduce them exactly, or stop here.
+    fingerprint = split_fingerprint(kept)
+    fp_path = Path(paths["split_fingerprint"])
+    if fp_path.exists() and fp_path.read_text().strip() != fingerprint and not args.update_fingerprint:
+        raise SystemExit(f"Splits differ from {fp_path}. Check library versions; "
+                         "pass --update-fingerprint only if the change is intended.")
+    fp_path.write_text(fingerprint + "\n")
+
     counts = split_counts(kept)
     Path(paths["split_counts_csv"]).parent.mkdir(parents=True, exist_ok=True)
     counts.to_csv(paths["split_counts_csv"], index=False)
@@ -138,6 +149,7 @@ def main():
         "test_fraction_of_cases": round(float((kept.split == "test").mean()), 4),
         "cases_per_cv_fold": kept[kept.split == "cv"].cv_fold.value_counts().sort_index().to_dict(),
         "cases_per_class": kept.label.value_counts().to_dict(),
+        "split_fingerprint": fingerprint,
     }
     save_metrics(run_dir, summary)
 
