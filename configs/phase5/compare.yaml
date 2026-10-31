@@ -1,0 +1,21 @@
+# Phase 5 comparison: reads the out-of-fold predictions of each setting and compares
+# them with the baseline on the same cases (paired bootstrap). CV pool only.
+base: configs/phase5/common.yaml
+experiment: p5_compare
+
+settings:                      # first = the baseline every other setting is compared with
+  - configs/phase5/none.yaml
+  - configs/phase5/standard_aug.yaml
+  - configs/phase5/shades_of_gray.yaml
+  - configs/phase5/clahe.yaml
+
+analysis:
+  focus_classes: [psoriasis, tinea]   # the weak classes found in Phase 4
+  min_cell_cases: 5                   # recall CIs from fewer cases are flagged as unreliable
+  # Decision rule, fixed before seeing any Phase 5 result. A setting qualifies if its
+  # paired gain over the baseline in overall balanced accuracy is outside the noise
+  # (95% CI above 0) and no FST group gets worse outside the noise (no group's CI of
+  # the change entirely below 0). Pick the qualifying setting with the highest
+  # seed-mean overall balanced accuracy; if none qualifies, keep the baseline
+  # (the simplest setting).
+  selection_metric: balanced_accuracy

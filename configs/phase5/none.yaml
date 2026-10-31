@@ -1,0 +1,6 @@
+# Phase 5 setting: No augmentation, no preprocessing (the Phase 3/4 baseline).
+base: configs/phase5/common.yaml
+experiment: p5_none
+images:
+  augmentation: none
+  preprocessing: none

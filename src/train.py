@@ -17,8 +17,10 @@ results as an uninterrupted one. The folder also holds the config it was made
 with; a rerun with a different config stops instead of mixing results.
 
 Several seeds: if the config has a `seeds` list, the whole CV run is repeated
-once per seed on the same folds. `{seed}` in the paths is replaced by the seed,
-and each seed's folds are saved in their own `seed<N>/` subfolder.
+once per seed on the same folds. `{seed}` and `{experiment}` in the paths are
+filled in, and each seed's folds are saved in their own `seed<N>/` subfolder.
+The epoch budget search (if any) runs once, with the first seed, and every
+seed then uses the budget it picked.
 
 Usage:
     python -m src.train --config configs/baseline.yaml
@@ -177,12 +179,15 @@ def seed_config(config, seed):
     config = copy.deepcopy(config)
     del config["seeds"]
     config["seed"] = seed
-    config["paths"] = {k: v.format(seed=seed) for k, v in config["paths"].items()}
+    config["paths"] = {k: v.format(seed=seed, experiment=config["experiment"])
+                       for k, v in config["paths"].items()}
     return config
 
 
-def run_cv(config, fold_outputs_dir):
-    """Epoch budget (if not fixed) + 5-fold CV for one seed; writes predictions and the train log."""
+def run_cv(config, fold_outputs_dir, budget_log=None):
+    """Epoch budget (if not fixed or given) + 5-fold CV for one seed; writes predictions and
+    the train log. `budget_log` reuses a budget already searched with another seed.
+    Returns the budget log."""
     paths, tcfg = config["paths"], config["train"]
     store = FoldStore(fold_outputs_dir, config)
     set_seed(config["seed"])
@@ -205,7 +210,9 @@ def run_cv(config, fold_outputs_dir):
         return preds.merge(cases[["case_id", "label"]], on="case_id")
 
     # 1. Epoch budget, chosen on one fold only
-    epochs, budget_log = tcfg["epochs"], {"selected": tcfg["epochs"], "source": "config"}
+    if budget_log is None:
+        budget_log = {"selected": tcfg["epochs"], "source": "config"}
+    epochs = budget_log["selected"]
     if epochs is None:
         fold, scores, budget_seconds = tcfg["budget_fold"], {}, {}
         for candidate in tcfg["candidate_epochs"]:
@@ -226,7 +233,8 @@ def run_cv(config, fold_outputs_dir):
             budget_seconds[candidate] = saved["seconds"]
             print(f"  balanced accuracy: {scores[candidate]}")
         epochs = max(scores, key=lambda e: (scores[e], -e))  # ties -> fewer epochs
-        budget_log = {"selected": epochs, "source": "budget search", "budget_fold": fold,
+        budget_log = {"selected": epochs, "source": "budget search", "seed": config["seed"],
+                      "budget_fold": fold,
                       "metric": "case-level balanced accuracy", "scores": scores,
                       "seconds_per_candidate": budget_seconds}
         print(f"Selected epoch budget: {epochs}")
@@ -273,6 +281,7 @@ def run_cv(config, fold_outputs_dir):
     save_metrics(run_dir, log)
     oof.to_csv(run_dir / "oof_predictions.csv", index=False)
     print(f"Wrote {paths['predictions_csv']} and {paths['train_log_json']}. Run log: {run_dir}")
+    return budget_log
 
 
 def main():
@@ -285,12 +294,13 @@ def main():
     if "seeds" not in config:
         run_cv(config, args.fold_outputs_dir or config["paths"]["fold_outputs_dir"])
         return
+    budget_log = None  # searched with the first seed, then reused
     for seed in config["seeds"]:
-        print(f"===== Seed {seed} =====")
+        print(f"===== {config['experiment']}: seed {seed} =====")
         cfg = seed_config(config, seed)
         folder = Path(args.fold_outputs_dir) / f"seed{seed}" if args.fold_outputs_dir \
             else cfg["paths"]["fold_outputs_dir"]
-        run_cv(cfg, folder)
+        budget_log = run_cv(cfg, folder, budget_log)
 
 
 if __name__ == "__main__":

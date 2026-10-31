@@ -1,0 +1,6 @@
+# Phase 5 setting: Standard augmentation on training images: rotation, random resized crop, flips, mild colour jitter.
+base: configs/phase5/common.yaml
+experiment: p5_standard_aug
+images:
+  augmentation: standard
+  preprocessing: none

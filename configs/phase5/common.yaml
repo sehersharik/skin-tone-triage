@@ -1,0 +1,53 @@
+# Phase 5: image-processing experiments. Settings shared by all four experiments;
+# each experiment config (none, standard_aug, shades_of_gray, clahe) starts from this
+# file via `base:` and changes only `experiment` and the `images` block.
+# Same model, optimiser, folds and seeds as the Phase 4 baseline. The epoch budget is
+# re-picked per setting on fold 1 (cv_fold 0) with the first seed, as in Phase 3.
+# The test set is never loaded.
+
+seed: 42
+seeds: [42, 43, 44]
+
+paths:
+  raw_dir: data/raw/scin
+  cases_csv: data/processed/cases.csv
+  split_fingerprint: reports/split_fingerprint.txt
+  image_cache_dir: data/processed/images_256
+  runs_dir: runs
+  # {experiment} and {seed} are filled in by src.train
+  predictions_csv: reports/predictions/phase5/{experiment}_seed{seed}_oof.csv
+  fold_outputs_dir: reports/predictions/phase5/folds/{experiment}/seed{seed}
+  train_log_json: reports/phase5/{experiment}_seed{seed}_train_log.json
+  metrics_json: reports/metrics.json
+  figures_dir: docs/figures
+
+images:
+  cache_short_side: 256
+  input_size: 224
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+  augmentation: none           # none | standard (training images only)
+  preprocessing: none          # none | shades_of_gray | clahe (train and eval)
+  sog_power: 6                 # Shades of Gray Minkowski norm
+  clahe_clip_limit: 2.0
+  clahe_tile_grid: 8
+
+model:
+  name: efficientnet_b0
+  pretrained: true
+
+train:
+  batch_size: 32
+  lr: 3.0e-4
+  weight_decay: 1.0e-4
+  class_weighted_loss: true
+  scheduler: cosine
+  epochs: null                 # re-picked per setting, as in Phase 3
+  candidate_epochs: [5, 10, 15, 20]
+  budget_fold: 0               # cv_fold 0 = "fold 1"
+  num_workers: 4
+  device: auto
+
+evaluation:
+  n_bootstrap: 2000
+  ci_level: 0.95

@@ -1,0 +1,6 @@
+# Phase 5 setting: CLAHE contrast enhancement on every image (train and eval), no augmentation.
+base: configs/phase5/common.yaml
+experiment: p5_clahe
+images:
+  augmentation: none
+  preprocessing: clahe

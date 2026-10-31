@@ -8,9 +8,23 @@ import numpy as np
 import yaml
 
 
+def merge(base, override):
+    """Recursively merge two dicts; values in `override` win."""
+    out = dict(base)
+    for key, value in override.items():
+        out[key] = merge(out[key], value) if isinstance(value, dict) and isinstance(
+            out.get(key), dict) else value
+    return out
+
+
 def load_config(path):
+    """Load a YAML config. If it has `base: <path>`, start from that config and
+    apply this file's values on top (so experiment configs list only what differs)."""
     with open(path) as f:
-        return yaml.safe_load(f)
+        config = yaml.safe_load(f)
+    if "base" in config:
+        config = merge(load_config(config.pop("base")), config)
+    return config
 
 
 def set_seed(seed):

@@ -1,0 +1,6 @@
+# Phase 5 setting: Shades of Gray colour constancy on every image (train and eval), no augmentation.
+base: configs/phase5/common.yaml
+experiment: p5_shades_of_gray
+images:
+  augmentation: none
+  preprocessing: shades_of_gray
