@@ -432,6 +432,12 @@ def main():
                          "per_seed": [r4(v) for v in per_seed], "ci_low": low, "ci_high": high}
         part["focus_class_recall"] = {"class": focus, "by_group": recall,
                                       "gaps": pairwise_gaps(points, boots, order, ev["ci_level"])}
+        # Point estimates only: most cells are too small for a useful CI. Shows which
+        # classes drive a balanced-accuracy gap (balanced accuracy = mean of these recalls).
+        part["per_class_recall_by_group"] = {
+            g: {c: {"n_cases": int(((cv[col] == g).to_numpy() & (y == c)).sum()),
+                    "recall": r4(correct[:, (cv[col] == g).to_numpy() & (y == c)].mean())}
+                for c in classes} for g in order}
         part["accuracy"] = accuracy_section(cv, col, order, correct, ev, acfg["min_cell_cases"], rng)
         part["regression"] = regression_section(cv, col, order, classes, correct, focus, ev, rng)
         if all(f in cv for f in FACTORS):

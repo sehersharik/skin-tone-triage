@@ -116,3 +116,49 @@ Plain-English notes on what was built in each phase and why.
 - Surprisingly, the model did worse on the lightest skin group (FST I-II) than on FST III-IV, and that gap is
   outside the bootstrap noise. The darkest group (FST V-VI) is too small to say anything firm. The groups also have
   different mixes of conditions, so Phase 4 checks whether the gap is about skin tone or about condition mix.
+
+## Phase 4: Is the skin-tone gap real?
+
+**What was built**
+
+- `configs/seeds.yaml` + `src/train.py`: the Phase 3 baseline rerun with 3 seeds (42, 43, 44) on the same folds,
+  with the 5-epoch budget fixed. The seed changes the random parts (the new last layer's starting weights and the
+  order of training batches), so 3 seeds show how much the results move by chance alone.
+- `src/image_factors.py`: brightness, contrast, sharpness and resolution of every CV photo.
+- `src/tone_analysis.py`: four ways of asking whether skin tone matters once the condition is taken into account.
+  Results are in `reports/metrics.json` (`tone_analysis_cv`) and the `phase4_*` figures.
+
+**Why it was built this way**
+
+- *Seeds.* One training run can be lucky or unlucky. Each group's metric is reported as the mean over seeds, the
+  spread between seeds, and a bootstrap confidence interval.
+- *Condition mix.* The skin-tone groups have different mixes of conditions, and some conditions are harder than
+  others. A group could look worse just because it has more of the hard conditions. Four checks separate the two:
+  1. *One condition only* (dermatitis, the only class with enough cases in every group): the mix can't differ.
+  2. *Same-mix accuracy*: each group's per-condition recalls are reweighted to the same condition mix (the pooled
+     one), like age-standardised death rates in epidemiology.
+  3. *Logistic regression*: `correct ~ tone group + condition`. The tone odds ratio says how much more likely a
+     correct prediction is in a group compared with FST I-II, *for the same condition*. 1 means no difference.
+  4. *Photo factors*: added to the regression to see whether photo quality explains the gap.
+- *Balanced accuracy is already mix-free in one sense*: it is the plain average of the per-condition recalls, so
+  the mix of cases doesn't change it. What it does do is give each condition equal weight, so a small condition
+  (18 psoriasis cases) moves it as much as dermatitis (230 cases). Same-mix accuracy weights conditions by how
+  common they are, so comparing the two shows whether a gap comes from common or rare conditions.
+
+**What we learned**
+
+- Seed 42 reproduced Phase 3 exactly, so the pipeline is deterministic. Between seeds, the scores move by a few
+  points, and more for the smaller groups: a single seed can mislead.
+- The FST I-II vs III-IV balanced-accuracy gap holds across 3 seeds. But once the condition is held fixed, most
+  of it goes away: dermatitis recall is about the same in both groups, and the same-mix accuracy gap and the
+  regression's tone effect are about half the size, with confidence intervals that touch or cross "no difference".
+- The balanced-accuracy gap comes mostly from two small classes in FST I-II: psoriasis (almost never recognised)
+  and tinea. These are only about 20 cases each. That is a condition-specific weakness worth reporting, not
+  evidence that the model generally works worse on light skin.
+- The direction is the same in every check (FST I-II never comes out ahead), so a small real disadvantage can't be
+  ruled out. The Monk grouping tells the same story, with the condition-adjusted gap just outside the noise.
+- Photo quality doesn't explain it. FST I-II and III-IV photos have the same brightness, sharpness and resolution,
+  and only slightly different contrast. Adding these factors to the regression doesn't shrink the tone effect.
+  Photos of darker skin are darker overall (expected, since the skin is in the photo) and, unexpectedly, sharper.
+- The darkest groups (FST V-VI, Monk 7-10) show no sign of doing worse, but with 61 and 32 cases the confidence
+  intervals are too wide to rule out a large gap in either direction. That is a limit of the data, not a finding.

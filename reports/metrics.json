@@ -420,5 +420,1614 @@
         }
       }
     }
+  },
+  "tone_analysis_cv": {
+    "description": "Phase 4. Baseline EfficientNet-B0 (no augmentation, 5 epochs) rerun with several seeds on the same CV folds; case-level out-of-fold predictions on the CV pool. The test set was not used.",
+    "config": "configs/seeds.yaml",
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "classes": [
+      "dermatitis",
+      "folliculitis",
+      "insect_bite",
+      "psoriasis",
+      "tinea",
+      "urticaria"
+    ],
+    "overall": {
+      "n_cases": 928,
+      "balanced_accuracy": {
+        "mean": 0.3938,
+        "sd_over_seeds": 0.0336,
+        "min_seed": 0.3687,
+        "max_seed": 0.432,
+        "per_seed": [
+          0.3806,
+          0.432,
+          0.3687
+        ],
+        "ci_low": 0.3618,
+        "ci_high": 0.4245
+      },
+      "macro_f1": {
+        "mean": 0.3673,
+        "sd_over_seeds": 0.0341,
+        "min_seed": 0.3405,
+        "max_seed": 0.4057,
+        "per_seed": [
+          0.3557,
+          0.4057,
+          0.3405
+        ],
+        "ci_low": 0.3366,
+        "ci_high": 0.3961
+      },
+      "macro_auc_ovr": {
+        "mean": 0.7607,
+        "sd_over_seeds": 0.0152,
+        "min_seed": 0.751,
+        "max_seed": 0.7782,
+        "per_seed": [
+          0.751,
+          0.7782,
+          0.753
+        ],
+        "ci_low": 0.7386,
+        "ci_high": 0.7812
+      }
+    },
+    "overall_accuracy_per_seed": [
+      0.4655,
+      0.5119,
+      0.4547
+    ],
+    "efst": {
+      "group_column": "efst_group",
+      "metrics_by_group": {
+        "FST I-II": {
+          "n_cases": 402,
+          "balanced_accuracy": {
+            "mean": 0.3411,
+            "sd_over_seeds": 0.0448,
+            "min_seed": 0.3109,
+            "max_seed": 0.3926,
+            "per_seed": [
+              0.3109,
+              0.3926,
+              0.3199
+            ],
+            "ci_low": 0.2986,
+            "ci_high": 0.3852
+          },
+          "macro_f1": {
+            "mean": 0.3077,
+            "sd_over_seeds": 0.0402,
+            "min_seed": 0.2844,
+            "max_seed": 0.3541,
+            "per_seed": [
+              0.2844,
+              0.3541,
+              0.2847
+            ],
+            "ci_low": 0.2678,
+            "ci_high": 0.3449
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7281,
+            "sd_over_seeds": 0.0164,
+            "min_seed": 0.7152,
+            "max_seed": 0.7465,
+            "per_seed": [
+              0.7224,
+              0.7465,
+              0.7152
+            ],
+            "ci_low": 0.6934,
+            "ci_high": 0.7608
+          }
+        },
+        "FST III-IV": {
+          "n_cases": 425,
+          "balanced_accuracy": {
+            "mean": 0.4451,
+            "sd_over_seeds": 0.0274,
+            "min_seed": 0.4165,
+            "max_seed": 0.4711,
+            "per_seed": [
+              0.4477,
+              0.4711,
+              0.4165
+            ],
+            "ci_low": 0.3943,
+            "ci_high": 0.4939
+          },
+          "macro_f1": {
+            "mean": 0.4251,
+            "sd_over_seeds": 0.0268,
+            "min_seed": 0.398,
+            "max_seed": 0.4517,
+            "per_seed": [
+              0.4255,
+              0.4517,
+              0.398
+            ],
+            "ci_low": 0.3749,
+            "ci_high": 0.468
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7955,
+            "sd_over_seeds": 0.013,
+            "min_seed": 0.786,
+            "max_seed": 0.8103,
+            "per_seed": [
+              0.786,
+              0.8103,
+              0.7901
+            ],
+            "ci_low": 0.7649,
+            "ci_high": 0.8251
+          }
+        },
+        "FST V-VI": {
+          "n_cases": 61,
+          "balanced_accuracy": {
+            "mean": 0.4431,
+            "sd_over_seeds": 0.0161,
+            "min_seed": 0.4255,
+            "max_seed": 0.4569,
+            "per_seed": [
+              0.4468,
+              0.4569,
+              0.4255
+            ],
+            "ci_low": 0.3004,
+            "ci_high": 0.6378
+          },
+          "macro_f1": {
+            "mean": 0.3898,
+            "sd_over_seeds": 0.0401,
+            "min_seed": 0.3505,
+            "max_seed": 0.4307,
+            "per_seed": [
+              0.3881,
+              0.4307,
+              0.3505
+            ],
+            "ci_low": 0.2402,
+            "ci_high": 0.5429
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7726,
+            "sd_over_seeds": 0.0108,
+            "min_seed": 0.7624,
+            "max_seed": 0.784,
+            "per_seed": [
+              0.7713,
+              0.7624,
+              0.784
+            ],
+            "ci_low": 0.6854,
+            "ci_high": 0.8653
+          }
+        },
+        "excluded_missing_group": 40
+      },
+      "metrics_gaps": {
+        "balanced_accuracy": {
+          "FST III-IV minus FST I-II": {
+            "difference": 0.104,
+            "ci_low": 0.0392,
+            "ci_high": 0.1671,
+            "outside_noise": true
+          },
+          "FST V-VI minus FST I-II": {
+            "difference": 0.102,
+            "ci_low": -0.0461,
+            "ci_high": 0.2972,
+            "outside_noise": false
+          },
+          "FST V-VI minus FST III-IV": {
+            "difference": -0.002,
+            "ci_low": -0.1502,
+            "ci_high": 0.2019,
+            "outside_noise": false
+          }
+        },
+        "macro_f1": {
+          "FST III-IV minus FST I-II": {
+            "difference": 0.1174,
+            "ci_low": 0.0553,
+            "ci_high": 0.175,
+            "outside_noise": true
+          },
+          "FST V-VI minus FST I-II": {
+            "difference": 0.0821,
+            "ci_low": -0.0674,
+            "ci_high": 0.2409,
+            "outside_noise": false
+          },
+          "FST V-VI minus FST III-IV": {
+            "difference": -0.0353,
+            "ci_low": -0.1855,
+            "ci_high": 0.1256,
+            "outside_noise": false
+          }
+        },
+        "macro_auc_ovr": {
+          "FST III-IV minus FST I-II": {
+            "difference": 0.0674,
+            "ci_low": 0.0209,
+            "ci_high": 0.1114,
+            "outside_noise": true
+          },
+          "FST V-VI minus FST I-II": {
+            "difference": 0.0445,
+            "ci_low": -0.0457,
+            "ci_high": 0.1435,
+            "outside_noise": false
+          },
+          "FST V-VI minus FST III-IV": {
+            "difference": -0.0229,
+            "ci_low": -0.1121,
+            "ci_high": 0.0755,
+            "outside_noise": false
+          }
+        }
+      },
+      "focus_class_recall": {
+        "class": "dermatitis",
+        "by_group": {
+          "FST I-II": {
+            "n_cases": 230,
+            "mean": 0.5116,
+            "sd_over_seeds": 0.037,
+            "per_seed": [
+              0.513,
+              0.5478,
+              0.4739
+            ],
+            "ci_low": 0.458,
+            "ci_high": 0.5638
+          },
+          "FST III-IV": {
+            "n_cases": 218,
+            "mean": 0.5398,
+            "sd_over_seeds": 0.0253,
+            "per_seed": [
+              0.5229,
+              0.5688,
+              0.5275
+            ],
+            "ci_low": 0.4832,
+            "ci_high": 0.5963
+          },
+          "FST V-VI": {
+            "n_cases": 40,
+            "mean": 0.575,
+            "sd_over_seeds": 0.05,
+            "per_seed": [
+              0.625,
+              0.575,
+              0.525
+            ],
+            "ci_low": 0.45,
+            "ci_high": 0.7
+          }
+        },
+        "gaps": {
+          "FST III-IV minus FST I-II": {
+            "difference": 0.0282,
+            "ci_low": -0.0475,
+            "ci_high": 0.1066,
+            "outside_noise": false
+          },
+          "FST V-VI minus FST I-II": {
+            "difference": 0.0634,
+            "ci_low": -0.0765,
+            "ci_high": 0.1982,
+            "outside_noise": false
+          },
+          "FST V-VI minus FST III-IV": {
+            "difference": 0.0352,
+            "ci_low": -0.1024,
+            "ci_high": 0.1708,
+            "outside_noise": false
+          }
+        }
+      },
+      "per_class_recall_by_group": {
+        "FST I-II": {
+          "dermatitis": {
+            "n_cases": 230,
+            "recall": 0.5116
+          },
+          "folliculitis": {
+            "n_cases": 27,
+            "recall": 0.3951
+          },
+          "insect_bite": {
+            "n_cases": 56,
+            "recall": 0.4226
+          },
+          "psoriasis": {
+            "n_cases": 18,
+            "recall": 0.0185
+          },
+          "tinea": {
+            "n_cases": 20,
+            "recall": 0.15
+          },
+          "urticaria": {
+            "n_cases": 51,
+            "recall": 0.549
+          }
+        },
+        "FST III-IV": {
+          "dermatitis": {
+            "n_cases": 218,
+            "recall": 0.5398
+          },
+          "folliculitis": {
+            "n_cases": 43,
+            "recall": 0.4806
+          },
+          "insect_bite": {
+            "n_cases": 44,
+            "recall": 0.4924
+          },
+          "psoriasis": {
+            "n_cases": 28,
+            "recall": 0.2976
+          },
+          "tinea": {
+            "n_cases": 22,
+            "recall": 0.303
+          },
+          "urticaria": {
+            "n_cases": 70,
+            "recall": 0.5571
+          }
+        },
+        "FST V-VI": {
+          "dermatitis": {
+            "n_cases": 40,
+            "recall": 0.575
+          },
+          "folliculitis": {
+            "n_cases": 4,
+            "recall": 0.75
+          },
+          "insect_bite": {
+            "n_cases": 2,
+            "recall": 0.5
+          },
+          "psoriasis": {
+            "n_cases": 2,
+            "recall": 0.0
+          },
+          "tinea": {
+            "n_cases": 4,
+            "recall": 0.1667
+          },
+          "urticaria": {
+            "n_cases": 9,
+            "recall": 0.6667
+          }
+        }
+      },
+      "accuracy": {
+        "standard_mix": {
+          "dermatitis": 0.5495,
+          "folliculitis": 0.0833,
+          "insect_bite": 0.1149,
+          "psoriasis": 0.0541,
+          "tinea": 0.0518,
+          "urticaria": 0.1464
+        },
+        "crude": {
+          "FST I-II": {
+            "n_cases": 402,
+            "value": 0.4561,
+            "per_seed": [
+              0.4378,
+              0.5025,
+              0.4279
+            ],
+            "ci_low": 0.4154,
+            "ci_high": 0.4959
+          },
+          "FST III-IV": {
+            "n_cases": 425,
+            "value": 0.5035,
+            "per_seed": [
+              0.4965,
+              0.5294,
+              0.4847
+            ],
+            "ci_low": 0.4643,
+            "ci_high": 0.5443
+          },
+          "FST V-VI": {
+            "n_cases": 61,
+            "value": 0.5519,
+            "per_seed": [
+              0.5738,
+              0.5574,
+              0.5246
+            ],
+            "ci_low": 0.448,
+            "ci_high": 0.6557
+          }
+        },
+        "crude_gaps": {
+          "FST III-IV minus FST I-II": {
+            "difference": 0.0474,
+            "ci_low": -0.0098,
+            "ci_high": 0.1056,
+            "outside_noise": false
+          },
+          "FST V-VI minus FST I-II": {
+            "difference": 0.0958,
+            "ci_low": -0.0164,
+            "ci_high": 0.2072,
+            "outside_noise": false
+          },
+          "FST V-VI minus FST III-IV": {
+            "difference": 0.0484,
+            "ci_low": -0.0688,
+            "ci_high": 0.1609,
+            "outside_noise": false
+          }
+        },
+        "standardised": {
+          "FST I-II": {
+            "n_cases": 402,
+            "value": 0.4518,
+            "per_seed": [
+              0.4319,
+              0.4999,
+              0.4234
+            ],
+            "ci_low": 0.4123,
+            "ci_high": 0.4899,
+            "cases_per_class": {
+              "dermatitis": 230,
+              "folliculitis": 27,
+              "insect_bite": 56,
+              "psoriasis": 18,
+              "tinea": 20,
+              "urticaria": 51
+            },
+            "small_cells": [],
+            "reliable": true
+          },
+          "FST III-IV": {
+            "n_cases": 425,
+            "value": 0.5066,
+            "per_seed": [
+              0.4989,
+              0.5315,
+              0.4893
+            ],
+            "ci_low": 0.4685,
+            "ci_high": 0.5447,
+            "cases_per_class": {
+              "dermatitis": 218,
+              "folliculitis": 43,
+              "insect_bite": 44,
+              "psoriasis": 28,
+              "tinea": 22,
+              "urticaria": 70
+            },
+            "small_cells": [],
+            "reliable": true
+          },
+          "FST V-VI": {
+            "n_cases": 61,
+            "value": 0.5422,
+            "per_seed": [
+              0.5577,
+              0.5465,
+              0.5223
+            ],
+            "ci_low": 0.4209,
+            "ci_high": 0.6622,
+            "cases_per_class": {
+              "dermatitis": 40,
+              "folliculitis": 4,
+              "insect_bite": 2,
+              "psoriasis": 2,
+              "tinea": 4,
+              "urticaria": 9
+            },
+            "small_cells": [
+              "folliculitis",
+              "insect_bite",
+              "psoriasis",
+              "tinea"
+            ],
+            "reliable": false
+          }
+        },
+        "standardised_gaps": {
+          "FST III-IV minus FST I-II": {
+            "difference": 0.0548,
+            "ci_low": 0.0,
+            "ci_high": 0.1116,
+            "outside_noise": false,
+            "reliable": true
+          },
+          "FST V-VI minus FST I-II": {
+            "difference": 0.0904,
+            "ci_low": -0.0393,
+            "ci_high": 0.214,
+            "outside_noise": false,
+            "reliable": false
+          },
+          "FST V-VI minus FST III-IV": {
+            "difference": 0.0356,
+            "ci_low": -0.0891,
+            "ci_high": 0.1647,
+            "outside_noise": false,
+            "reliable": false
+          }
+        },
+        "note": "Standardised CIs are too narrow when a cell has fewer than 5 cases (the bootstrap cannot show how much such a small cell could vary); those groups are marked reliable: false."
+      },
+      "regression": {
+        "n_cases": 888,
+        "n_rows": 2664,
+        "reference_group": "FST I-II",
+        "outcome": "case predicted correctly (one row per case per seed)",
+        "models": {
+          "tone only": {
+            "FST III-IV vs FST I-II": {
+              "odds_ratio": 1.2096,
+              "ci_low": 0.9537,
+              "ci_high": 1.5389,
+              "outside_noise": false,
+              "per_seed_odds_ratio": [
+                1.266,
+                1.1154,
+                1.2579
+              ]
+            },
+            "FST V-VI vs FST I-II": {
+              "odds_ratio": 1.469,
+              "ci_low": 0.9181,
+              "ci_high": 2.3357,
+              "outside_noise": false,
+              "per_seed_odds_ratio": [
+                1.7282,
+                1.2476,
+                1.4755
+              ]
+            }
+          },
+          "tone + condition": {
+            "FST III-IV vs FST I-II": {
+              "odds_ratio": 1.2573,
+              "ci_low": 0.9793,
+              "ci_high": 1.6021,
+              "outside_noise": false,
+              "per_seed_odds_ratio": [
+                1.3232,
+                1.1416,
+                1.3179
+              ]
+            },
+            "FST V-VI vs FST I-II": {
+              "odds_ratio": 1.4521,
+              "ci_low": 0.9019,
+              "ci_high": 2.3063,
+              "outside_noise": false,
+              "per_seed_odds_ratio": [
+                1.7052,
+                1.2162,
+                1.4879
+              ]
+            }
+          },
+          "tone + condition + photo factors": {
+            "FST III-IV vs FST I-II": {
+              "odds_ratio": 1.2913,
+              "ci_low": 1.0062,
+              "ci_high": 1.6481,
+              "outside_noise": true,
+              "per_seed_odds_ratio": [
+                1.3665,
+                1.1722,
+                1.3481
+              ]
+            },
+            "FST V-VI vs FST I-II": {
+              "odds_ratio": 1.4911,
+              "ci_low": 0.9092,
+              "ci_high": 2.4152,
+              "outside_noise": false,
+              "per_seed_odds_ratio": [
+                1.7388,
+                1.2648,
+                1.4964
+              ]
+            }
+          }
+        }
+      },
+      "photo_factors": {
+        "brightness": {
+          "FST I-II": {
+            "n_cases": 402,
+            "mean": 128.0208,
+            "ci_low": 125.9321,
+            "ci_high": 129.9636,
+            "median": 131.7436,
+            "q25": 115.4493,
+            "q75": 142.1946
+          },
+          "FST III-IV": {
+            "n_cases": 425,
+            "mean": 126.9826,
+            "ci_low": 124.9915,
+            "ci_high": 128.8276,
+            "median": 130.0405,
+            "q25": 116.8076,
+            "q75": 140.3606
+          },
+          "FST V-VI": {
+            "n_cases": 61,
+            "mean": 113.5452,
+            "ci_low": 108.1163,
+            "ci_high": 118.8685,
+            "median": 116.3845,
+            "q25": 101.9874,
+            "q75": 127.7392
+          },
+          "gaps_in_mean": {
+            "FST III-IV minus FST I-II": {
+              "difference": -1.0382,
+              "ci_low": -3.7335,
+              "ci_high": 1.837,
+              "outside_noise": false
+            },
+            "FST V-VI minus FST I-II": {
+              "difference": -14.4756,
+              "ci_low": -20.3639,
+              "ci_high": -8.7619,
+              "outside_noise": true
+            },
+            "FST V-VI minus FST III-IV": {
+              "difference": -13.4374,
+              "ci_low": -19.0246,
+              "ci_high": -7.9235,
+              "outside_noise": true
+            }
+          }
+        },
+        "contrast": {
+          "FST I-II": {
+            "n_cases": 402,
+            "mean": 53.7188,
+            "ci_low": 52.4978,
+            "ci_high": 54.9914,
+            "median": 53.9238,
+            "q25": 45.5726,
+            "q75": 61.8998
+          },
+          "FST III-IV": {
+            "n_cases": 425,
+            "mean": 50.4888,
+            "ci_low": 49.507,
+            "ci_high": 51.5223,
+            "median": 50.2112,
+            "q25": 43.0561,
+            "q75": 57.488
+          },
+          "FST V-VI": {
+            "n_cases": 61,
+            "mean": 50.5547,
+            "ci_low": 48.0443,
+            "ci_high": 52.9793,
+            "median": 49.7352,
+            "q25": 42.879,
+            "q75": 57.0008
+          },
+          "gaps_in_mean": {
+            "FST III-IV minus FST I-II": {
+              "difference": -3.2301,
+              "ci_low": -4.7508,
+              "ci_high": -1.7649,
+              "outside_noise": true
+            },
+            "FST V-VI minus FST I-II": {
+              "difference": -3.1641,
+              "ci_low": -6.0118,
+              "ci_high": -0.4204,
+              "outside_noise": true
+            },
+            "FST V-VI minus FST III-IV": {
+              "difference": 0.066,
+              "ci_low": -2.6179,
+              "ci_high": 2.7492,
+              "outside_noise": false
+            }
+          }
+        },
+        "sharpness": {
+          "FST I-II": {
+            "n_cases": 402,
+            "mean": 219.9526,
+            "ci_low": 196.6067,
+            "ci_high": 244.3846,
+            "median": 149.2046,
+            "q25": 79.2225,
+            "q75": 258.1065
+          },
+          "FST III-IV": {
+            "n_cases": 425,
+            "mean": 212.9045,
+            "ci_low": 191.6396,
+            "ci_high": 237.5195,
+            "median": 147.7348,
+            "q25": 86.8925,
+            "q75": 264.2108
+          },
+          "FST V-VI": {
+            "n_cases": 61,
+            "mean": 358.0902,
+            "ci_low": 266.5365,
+            "ci_high": 475.4365,
+            "median": 262.479,
+            "q25": 110.4026,
+            "q75": 440.8163
+          },
+          "gaps_in_mean": {
+            "FST III-IV minus FST I-II": {
+              "difference": -7.0481,
+              "ci_low": -40.073,
+              "ci_high": 26.3606,
+              "outside_noise": false
+            },
+            "FST V-VI minus FST I-II": {
+              "difference": 138.1375,
+              "ci_low": 41.4006,
+              "ci_high": 259.6112,
+              "outside_noise": true
+            },
+            "FST V-VI minus FST III-IV": {
+              "difference": 145.1856,
+              "ci_low": 48.0479,
+              "ci_high": 267.7384,
+              "outside_noise": true
+            }
+          }
+        },
+        "megapixels": {
+          "FST I-II": {
+            "n_cases": 402,
+            "mean": 0.76,
+            "ci_low": 0.7436,
+            "ci_high": 0.776,
+            "median": 0.8748,
+            "q25": 0.6525,
+            "q75": 0.8748
+          },
+          "FST III-IV": {
+            "n_cases": 425,
+            "mean": 0.7661,
+            "ci_low": 0.7508,
+            "ci_high": 0.7808,
+            "median": 0.8748,
+            "q25": 0.6556,
+            "q75": 0.8748
+          },
+          "FST V-VI": {
+            "n_cases": 61,
+            "mean": 0.7947,
+            "ci_low": 0.7574,
+            "ci_high": 0.8288,
+            "median": 0.8748,
+            "q25": 0.7523,
+            "q75": 0.8748
+          },
+          "gaps_in_mean": {
+            "FST III-IV minus FST I-II": {
+              "difference": 0.0062,
+              "ci_low": -0.0151,
+              "ci_high": 0.0288,
+              "outside_noise": false
+            },
+            "FST V-VI minus FST I-II": {
+              "difference": 0.0347,
+              "ci_low": -0.004,
+              "ci_high": 0.0738,
+              "outside_noise": false
+            },
+            "FST V-VI minus FST III-IV": {
+              "difference": 0.0286,
+              "ci_low": -0.0097,
+              "ci_high": 0.0661,
+              "outside_noise": false
+            }
+          }
+        }
+      }
+    },
+    "monk": {
+      "group_column": "monk_us_group",
+      "metrics_by_group": {
+        "Monk 1-3": {
+          "n_cases": 661,
+          "balanced_accuracy": {
+            "mean": 0.3746,
+            "sd_over_seeds": 0.0309,
+            "min_seed": 0.353,
+            "max_seed": 0.41,
+            "per_seed": [
+              0.3607,
+              0.41,
+              0.353
+            ],
+            "ci_low": 0.3366,
+            "ci_high": 0.4126
+          },
+          "macro_f1": {
+            "mean": 0.3452,
+            "sd_over_seeds": 0.0317,
+            "min_seed": 0.32,
+            "max_seed": 0.3808,
+            "per_seed": [
+              0.3347,
+              0.3808,
+              0.32
+            ],
+            "ci_low": 0.3091,
+            "ci_high": 0.3787
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7477,
+            "sd_over_seeds": 0.0184,
+            "min_seed": 0.7369,
+            "max_seed": 0.7689,
+            "per_seed": [
+              0.7369,
+              0.7689,
+              0.7373
+            ],
+            "ci_low": 0.7196,
+            "ci_high": 0.7741
+          }
+        },
+        "Monk 4-6": {
+          "n_cases": 232,
+          "balanced_accuracy": {
+            "mean": 0.4395,
+            "sd_over_seeds": 0.0373,
+            "min_seed": 0.4049,
+            "max_seed": 0.4791,
+            "per_seed": [
+              0.4345,
+              0.4791,
+              0.4049
+            ],
+            "ci_low": 0.376,
+            "ci_high": 0.5056
+          },
+          "macro_f1": {
+            "mean": 0.4277,
+            "sd_over_seeds": 0.0354,
+            "min_seed": 0.3989,
+            "max_seed": 0.4672,
+            "per_seed": [
+              0.4169,
+              0.4672,
+              0.3989
+            ],
+            "ci_low": 0.3601,
+            "ci_high": 0.4867
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7929,
+            "sd_over_seeds": 0.009,
+            "min_seed": 0.7849,
+            "max_seed": 0.8027,
+            "per_seed": [
+              0.7912,
+              0.8027,
+              0.7849
+            ],
+            "ci_low": 0.7524,
+            "ci_high": 0.8319
+          }
+        },
+        "Monk 7-10": {
+          "n_cases": 32,
+          "balanced_accuracy": {
+            "mean": 0.5311,
+            "sd_over_seeds": 0.0849,
+            "min_seed": 0.4333,
+            "max_seed": 0.5867,
+            "per_seed": [
+              0.4333,
+              0.5733,
+              0.5867
+            ],
+            "ci_low": 0.3065,
+            "ci_high": 0.7161
+          },
+          "macro_f1": {
+            "mean": 0.3517,
+            "sd_over_seeds": 0.0646,
+            "min_seed": 0.2937,
+            "max_seed": 0.4213,
+            "per_seed": [
+              0.2937,
+              0.4213,
+              0.3402
+            ],
+            "ci_low": 0.2383,
+            "ci_high": 0.57
+          },
+          "macro_auc_ovr": {
+            "mean": 0.8406,
+            "sd_over_seeds": 0.0326,
+            "min_seed": 0.8215,
+            "max_seed": 0.8782,
+            "per_seed": [
+              0.8215,
+              0.8782,
+              0.822
+            ],
+            "ci_low": 0.7422,
+            "ci_high": 0.9158
+          }
+        },
+        "excluded_missing_group": 3
+      },
+      "metrics_gaps": {
+        "balanced_accuracy": {
+          "Monk 4-6 minus Monk 1-3": {
+            "difference": 0.0649,
+            "ci_low": -0.0079,
+            "ci_high": 0.1387,
+            "outside_noise": false
+          },
+          "Monk 7-10 minus Monk 1-3": {
+            "difference": 0.1565,
+            "ci_low": -0.0619,
+            "ci_high": 0.349,
+            "outside_noise": false
+          },
+          "Monk 7-10 minus Monk 4-6": {
+            "difference": 0.0916,
+            "ci_low": -0.1266,
+            "ci_high": 0.2839,
+            "outside_noise": false
+          }
+        },
+        "macro_f1": {
+          "Monk 4-6 minus Monk 1-3": {
+            "difference": 0.0825,
+            "ci_low": 0.0076,
+            "ci_high": 0.1495,
+            "outside_noise": true
+          },
+          "Monk 7-10 minus Monk 1-3": {
+            "difference": 0.0065,
+            "ci_low": -0.1101,
+            "ci_high": 0.2312,
+            "outside_noise": false
+          },
+          "Monk 7-10 minus Monk 4-6": {
+            "difference": -0.076,
+            "ci_low": -0.2026,
+            "ci_high": 0.151,
+            "outside_noise": false
+          }
+        },
+        "macro_auc_ovr": {
+          "Monk 4-6 minus Monk 1-3": {
+            "difference": 0.0452,
+            "ci_low": -0.0038,
+            "ci_high": 0.0931,
+            "outside_noise": false
+          },
+          "Monk 7-10 minus Monk 1-3": {
+            "difference": 0.0929,
+            "ci_low": -0.0088,
+            "ci_high": 0.174,
+            "outside_noise": false
+          },
+          "Monk 7-10 minus Monk 4-6": {
+            "difference": 0.0477,
+            "ci_low": -0.0563,
+            "ci_high": 0.1344,
+            "outside_noise": false
+          }
+        }
+      },
+      "focus_class_recall": {
+        "class": "dermatitis",
+        "by_group": {
+          "Monk 1-3": {
+            "n_cases": 369,
+            "mean": 0.505,
+            "sd_over_seeds": 0.0366,
+            "per_seed": [
+              0.5041,
+              0.542,
+              0.4688
+            ],
+            "ci_low": 0.4616,
+            "ci_high": 0.5465
+          },
+          "Monk 4-6": {
+            "n_cases": 112,
+            "mean": 0.5833,
+            "sd_over_seeds": 0.0314,
+            "per_seed": [
+              0.5536,
+              0.6161,
+              0.5804
+            ],
+            "ci_low": 0.506,
+            "ci_high": 0.6577
+          },
+          "Monk 7-10": {
+            "n_cases": 25,
+            "mean": 0.52,
+            "sd_over_seeds": 0.08,
+            "per_seed": [
+              0.6,
+              0.44,
+              0.52
+            ],
+            "ci_low": 0.36,
+            "ci_high": 0.68
+          }
+        },
+        "gaps": {
+          "Monk 4-6 minus Monk 1-3": {
+            "difference": 0.0784,
+            "ci_low": -0.0088,
+            "ci_high": 0.1669,
+            "outside_noise": false
+          },
+          "Monk 7-10 minus Monk 1-3": {
+            "difference": 0.015,
+            "ci_low": -0.152,
+            "ci_high": 0.1757,
+            "outside_noise": false
+          },
+          "Monk 7-10 minus Monk 4-6": {
+            "difference": -0.0633,
+            "ci_low": -0.2427,
+            "ci_high": 0.107,
+            "outside_noise": false
+          }
+        }
+      },
+      "per_class_recall_by_group": {
+        "Monk 1-3": {
+          "dermatitis": {
+            "n_cases": 369,
+            "recall": 0.505
+          },
+          "folliculitis": {
+            "n_cases": 55,
+            "recall": 0.4788
+          },
+          "insect_bite": {
+            "n_cases": 84,
+            "recall": 0.4246
+          },
+          "psoriasis": {
+            "n_cases": 31,
+            "recall": 0.1183
+          },
+          "tinea": {
+            "n_cases": 31,
+            "recall": 0.2043
+          },
+          "urticaria": {
+            "n_cases": 91,
+            "recall": 0.5165
+          }
+        },
+        "Monk 4-6": {
+          "dermatitis": {
+            "n_cases": 112,
+            "recall": 0.5833
+          },
+          "folliculitis": {
+            "n_cases": 19,
+            "recall": 0.4561
+          },
+          "insect_bite": {
+            "n_cases": 21,
+            "recall": 0.5079
+          },
+          "psoriasis": {
+            "n_cases": 17,
+            "recall": 0.2941
+          },
+          "tinea": {
+            "n_cases": 17,
+            "recall": 0.2157
+          },
+          "urticaria": {
+            "n_cases": 46,
+            "recall": 0.5797
+          }
+        },
+        "Monk 7-10": {
+          "dermatitis": {
+            "n_cases": 25,
+            "recall": 0.52
+          },
+          "folliculitis": {
+            "n_cases": 1,
+            "recall": 0.3333
+          },
+          "insect_bite": {
+            "n_cases": 1,
+            "recall": 1.0
+          },
+          "psoriasis": {
+            "n_cases": 2,
+            "recall": 0.0
+          },
+          "tinea": {
+            "n_cases": 1,
+            "recall": 0.3333
+          },
+          "urticaria": {
+            "n_cases": 2,
+            "recall": 1.0
+          }
+        }
+      },
+      "accuracy": {
+        "standard_mix": {
+          "dermatitis": 0.547,
+          "folliculitis": 0.0811,
+          "insect_bite": 0.1146,
+          "psoriasis": 0.0541,
+          "tinea": 0.053,
+          "urticaria": 0.1503
+        },
+        "crude": {
+          "Monk 1-3": {
+            "n_cases": 661,
+            "value": 0.4619,
+            "per_seed": [
+              0.4508,
+              0.5008,
+              0.4342
+            ],
+            "ci_low": 0.4312,
+            "ci_high": 0.4932
+          },
+          "Monk 4-6": {
+            "n_cases": 232,
+            "value": 0.5172,
+            "per_seed": [
+              0.4957,
+              0.5517,
+              0.5043
+            ],
+            "ci_low": 0.4612,
+            "ci_high": 0.5718
+          },
+          "Monk 7-10": {
+            "n_cases": 32,
+            "value": 0.5208,
+            "per_seed": [
+              0.5625,
+              0.4688,
+              0.5312
+            ],
+            "ci_low": 0.375,
+            "ci_high": 0.6562
+          }
+        },
+        "crude_gaps": {
+          "Monk 4-6 minus Monk 1-3": {
+            "difference": 0.0553,
+            "ci_low": -0.0073,
+            "ci_high": 0.1174,
+            "outside_noise": false
+          },
+          "Monk 7-10 minus Monk 1-3": {
+            "difference": 0.0589,
+            "ci_low": -0.0878,
+            "ci_high": 0.1982,
+            "outside_noise": false
+          },
+          "Monk 7-10 minus Monk 4-6": {
+            "difference": 0.0036,
+            "ci_low": -0.1505,
+            "ci_high": 0.1498,
+            "outside_noise": false
+          }
+        },
+        "standardised": {
+          "Monk 1-3": {
+            "n_cases": 661,
+            "value": 0.4585,
+            "per_seed": [
+              0.4479,
+              0.4973,
+              0.4304
+            ],
+            "ci_low": 0.4271,
+            "ci_high": 0.489,
+            "cases_per_class": {
+              "dermatitis": 369,
+              "folliculitis": 55,
+              "insect_bite": 84,
+              "psoriasis": 31,
+              "tinea": 31,
+              "urticaria": 91
+            },
+            "small_cells": [],
+            "reliable": true
+          },
+          "Monk 4-6": {
+            "n_cases": 232,
+            "value": 0.5287,
+            "per_seed": [
+              0.5068,
+              0.5604,
+              0.519
+            ],
+            "ci_low": 0.4752,
+            "ci_high": 0.5846,
+            "cases_per_class": {
+              "dermatitis": 112,
+              "folliculitis": 19,
+              "insect_bite": 21,
+              "psoriasis": 17,
+              "tinea": 17,
+              "urticaria": 46
+            },
+            "small_cells": [],
+            "reliable": true
+          },
+          "Monk 7-10": {
+            "n_cases": 32,
+            "value": 0.594,
+            "per_seed": [
+              0.5931,
+              0.5585,
+              0.6304
+            ],
+            "ci_low": 0.5138,
+            "ci_high": 0.6815,
+            "cases_per_class": {
+              "dermatitis": 25,
+              "folliculitis": 1,
+              "insect_bite": 1,
+              "psoriasis": 2,
+              "tinea": 1,
+              "urticaria": 2
+            },
+            "small_cells": [
+              "folliculitis",
+              "insect_bite",
+              "psoriasis",
+              "tinea",
+              "urticaria"
+            ],
+            "reliable": false
+          }
+        },
+        "standardised_gaps": {
+          "Monk 4-6 minus Monk 1-3": {
+            "difference": 0.0702,
+            "ci_low": 0.0091,
+            "ci_high": 0.1336,
+            "outside_noise": true,
+            "reliable": true
+          },
+          "Monk 7-10 minus Monk 1-3": {
+            "difference": 0.1355,
+            "ci_low": 0.0468,
+            "ci_high": 0.2265,
+            "outside_noise": true,
+            "reliable": false
+          },
+          "Monk 7-10 minus Monk 4-6": {
+            "difference": 0.0653,
+            "ci_low": -0.0315,
+            "ci_high": 0.1659,
+            "outside_noise": false,
+            "reliable": false
+          }
+        },
+        "note": "Standardised CIs are too narrow when a cell has fewer than 5 cases (the bootstrap cannot show how much such a small cell could vary); those groups are marked reliable: false."
+      },
+      "regression": {
+        "n_cases": 925,
+        "n_rows": 2775,
+        "reference_group": "Monk 1-3",
+        "outcome": "case predicted correctly (one row per case per seed)",
+        "models": {
+          "tone only": {
+            "Monk 4-6 vs Monk 1-3": {
+              "odds_ratio": 1.2481,
+              "ci_low": 0.969,
+              "ci_high": 1.6123,
+              "outside_noise": false,
+              "per_seed_odds_ratio": [
+                1.1976,
+                1.2274,
+                1.3259
+              ]
+            },
+            "Monk 7-10 vs Monk 1-3": {
+              "odds_ratio": 1.2661,
+              "ci_low": 0.6895,
+              "ci_high": 2.311,
+              "outside_noise": false,
+              "per_seed_odds_ratio": [
+                1.5664,
+                0.8799,
+                1.4769
+              ]
+            }
+          },
+          "tone + condition": {
+            "Monk 4-6 vs Monk 1-3": {
+              "odds_ratio": 1.3429,
+              "ci_low": 1.0343,
+              "ci_high": 1.765,
+              "outside_noise": true,
+              "per_seed_odds_ratio": [
+                1.2809,
+                1.3105,
+                1.4475
+              ]
+            },
+            "Monk 7-10 vs Monk 1-3": {
+              "odds_ratio": 1.2496,
+              "ci_low": 0.667,
+              "ci_high": 2.2823,
+              "outside_noise": false,
+              "per_seed_odds_ratio": [
+                1.5218,
+                0.8522,
+                1.5013
+              ]
+            }
+          },
+          "tone + condition + photo factors": {
+            "Monk 4-6 vs Monk 1-3": {
+              "odds_ratio": 1.3854,
+              "ci_low": 1.0618,
+              "ci_high": 1.8349,
+              "outside_noise": true,
+              "per_seed_odds_ratio": [
+                1.3231,
+                1.3601,
+                1.484
+              ]
+            },
+            "Monk 7-10 vs Monk 1-3": {
+              "odds_ratio": 1.3193,
+              "ci_low": 0.6963,
+              "ci_high": 2.4468,
+              "outside_noise": false,
+              "per_seed_odds_ratio": [
+                1.5541,
+                0.9363,
+                1.5485
+              ]
+            }
+          }
+        }
+      },
+      "photo_factors": {
+        "brightness": {
+          "Monk 1-3": {
+            "n_cases": 661,
+            "mean": 128.2398,
+            "ci_low": 126.669,
+            "ci_high": 129.7153,
+            "median": 131.5622,
+            "q25": 116.8417,
+            "q75": 141.8557
+          },
+          "Monk 4-6": {
+            "n_cases": 232,
+            "mean": 122.9241,
+            "ci_low": 120.3938,
+            "ci_high": 125.3541,
+            "median": 125.4401,
+            "q25": 111.2644,
+            "q75": 136.9388
+          },
+          "Monk 7-10": {
+            "n_cases": 32,
+            "mean": 106.1338,
+            "ci_low": 99.4917,
+            "ci_high": 112.6975,
+            "median": 107.5996,
+            "q25": 94.4757,
+            "q75": 120.3383
+          },
+          "gaps_in_mean": {
+            "Monk 4-6 minus Monk 1-3": {
+              "difference": -5.3157,
+              "ci_low": -8.2922,
+              "ci_high": -2.4552,
+              "outside_noise": true
+            },
+            "Monk 7-10 minus Monk 1-3": {
+              "difference": -22.106,
+              "ci_low": -28.7886,
+              "ci_high": -15.4377,
+              "outside_noise": true
+            },
+            "Monk 7-10 minus Monk 4-6": {
+              "difference": -16.7903,
+              "ci_low": -23.9753,
+              "ci_high": -10.2684,
+              "outside_noise": true
+            }
+          }
+        },
+        "contrast": {
+          "Monk 1-3": {
+            "n_cases": 661,
+            "mean": 52.5986,
+            "ci_low": 51.697,
+            "ci_high": 53.585,
+            "median": 53.2517,
+            "q25": 43.8509,
+            "q75": 60.8758
+          },
+          "Monk 4-6": {
+            "n_cases": 232,
+            "mean": 50.0151,
+            "ci_low": 48.6675,
+            "ci_high": 51.3729,
+            "median": 49.8198,
+            "q25": 42.7293,
+            "q75": 56.4241
+          },
+          "Monk 7-10": {
+            "n_cases": 32,
+            "mean": 49.1849,
+            "ci_low": 45.3438,
+            "ci_high": 52.6782,
+            "median": 48.8486,
+            "q25": 42.3166,
+            "q75": 55.9089
+          },
+          "gaps_in_mean": {
+            "Monk 4-6 minus Monk 1-3": {
+              "difference": -2.5835,
+              "ci_low": -4.2194,
+              "ci_high": -0.9431,
+              "outside_noise": true
+            },
+            "Monk 7-10 minus Monk 1-3": {
+              "difference": -3.4137,
+              "ci_low": -7.3238,
+              "ci_high": 0.2489,
+              "outside_noise": false
+            },
+            "Monk 7-10 minus Monk 4-6": {
+              "difference": -0.8302,
+              "ci_low": -4.8289,
+              "ci_high": 2.9154,
+              "outside_noise": false
+            }
+          }
+        },
+        "sharpness": {
+          "Monk 1-3": {
+            "n_cases": 661,
+            "mean": 218.5769,
+            "ci_low": 198.3687,
+            "ci_high": 241.6092,
+            "median": 143.2566,
+            "q25": 79.1406,
+            "q75": 255.7489
+          },
+          "Monk 4-6": {
+            "n_cases": 232,
+            "mean": 236.955,
+            "ci_low": 205.2604,
+            "ci_high": 275.7115,
+            "median": 168.7706,
+            "q25": 95.2651,
+            "q75": 278.7913
+          },
+          "Monk 7-10": {
+            "n_cases": 32,
+            "mean": 374.8546,
+            "ci_low": 260.6141,
+            "ci_high": 497.8408,
+            "median": 269.0274,
+            "q25": 109.5506,
+            "q75": 495.8954
+          },
+          "gaps_in_mean": {
+            "Monk 4-6 minus Monk 1-3": {
+              "difference": 18.3781,
+              "ci_low": -20.1458,
+              "ci_high": 60.0226,
+              "outside_noise": false
+            },
+            "Monk 7-10 minus Monk 1-3": {
+              "difference": 156.2777,
+              "ci_low": 41.4622,
+              "ci_high": 278.0136,
+              "outside_noise": true
+            },
+            "Monk 7-10 minus Monk 4-6": {
+              "difference": 137.8996,
+              "ci_low": 17.9666,
+              "ci_high": 263.7844,
+              "outside_noise": true
+            }
+          }
+        },
+        "megapixels": {
+          "Monk 1-3": {
+            "n_cases": 661,
+            "mean": 0.7648,
+            "ci_low": 0.7533,
+            "ci_high": 0.7764,
+            "median": 0.8748,
+            "q25": 0.6556,
+            "q75": 0.8748
+          },
+          "Monk 4-6": {
+            "n_cases": 232,
+            "mean": 0.7739,
+            "ci_low": 0.7521,
+            "ci_high": 0.7944,
+            "median": 0.8748,
+            "q25": 0.6544,
+            "q75": 0.8748
+          },
+          "Monk 7-10": {
+            "n_cases": 32,
+            "mean": 0.746,
+            "ci_low": 0.6868,
+            "ci_high": 0.7954,
+            "median": 0.8286,
+            "q25": 0.6496,
+            "q75": 0.8748
+          },
+          "gaps_in_mean": {
+            "Monk 4-6 minus Monk 1-3": {
+              "difference": 0.009,
+              "ci_low": -0.016,
+              "ci_high": 0.0336,
+              "outside_noise": false
+            },
+            "Monk 7-10 minus Monk 1-3": {
+              "difference": -0.0188,
+              "ci_low": -0.0807,
+              "ci_high": 0.0339,
+              "outside_noise": false
+            },
+            "Monk 7-10 minus Monk 4-6": {
+              "difference": -0.0279,
+              "ci_low": -0.0886,
+              "ci_high": 0.0258,
+              "outside_noise": false
+            }
+          }
+        }
+      }
+    }
   }
 }
