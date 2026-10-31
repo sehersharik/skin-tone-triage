@@ -140,10 +140,12 @@ def plot_groups(section, path):
     axes[0].set_yticks(range(len(rows)),
                        [f"{g} (n={r['n_cases']})" for g, _, r in rows])
     axes[0].invert_yaxis()
-    axes[-1].legend(loc="lower right", fontsize=8)
+    # One shared legend below the panels, so it can never cover a data point
+    fig.legend(*axes[0].get_legend_handles_labels(), loc="lower center", ncol=2, fontsize=8,
+               frameon=False)
     fig.suptitle("Baseline by skin-tone group (CV out-of-fold, 95% bootstrap CI; dashed = overall)",
                  fontsize=10)
-    fig.tight_layout(); fig.savefig(path, dpi=130); plt.close(fig)
+    fig.tight_layout(rect=(0, 0.06, 1, 1)); fig.savefig(path, dpi=130); plt.close(fig)
 
 
 def main():

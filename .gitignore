@@ -4,6 +4,9 @@ data/processed/
 *.png.part
 *.jpg.part
 
+# Archives downloaded from Kaggle/Colab (unzip, then delete)
+*.zip
+
 # Run logs: keep only summaries
 runs/*
 !runs/README.md

@@ -67,3 +67,52 @@ Plain-English notes on what was built in each phase and why.
   matter more than plain accuracy.
 - The FST V-VI test group is very small (single digits for most classes). Per-tone results for that group will
   be reported with wide confidence intervals and should be read as indicative only.
+
+## Phase 3: Preprocessing and baseline
+
+**What was built**
+
+- `src/prepare_images.py`: resizes every image once (short side 256 px) and caches it, because decoding full-size
+  phone photos every epoch is slow on Kaggle's few CPU cores.
+- `src/transforms.py`: resize the short side to 224, centre-crop to 224x224, normalise with ImageNet mean/std.
+  No augmentation yet; Phase 5 compares augmentation options. Validation always uses the plain transform.
+- `src/models.py`: a pretrained EfficientNet-B0 (ImageNet weights) with its last layer replaced by a 6-class layer.
+- `src/train.py`: 5-fold cross-validation on the CV pool. For each fold, train on the other 4 folds, predict the
+  held-out fold, average the photo probabilities within each case. Every case gets exactly one *out-of-fold*
+  prediction, from a model that never saw it. The test set is dropped before training starts.
+- `src/evaluate.py`: case-level balanced accuracy, macro F1 and macro one-vs-rest AUC, overall and per skin-tone
+  group, with 95% bootstrap confidence intervals. Everything is written to `reports/metrics.json` (`baseline_cv`)
+  and the figures are drawn from that file.
+- `notebooks/kaggle_colab_runner.ipynb`: clones the repo on Kaggle and runs the scripts on a free T4 GPU. Each
+  finished fold is saved straight away, so a timeout doesn't lose work.
+
+**Why it was built this way**
+
+- *Class-weighted loss.* Dermatitis is over half the data. Without weights the model can score well by mostly
+  saying "dermatitis". Each class's loss is scaled by the inverse of its frequency so rare classes count as much.
+- *Balanced accuracy, not accuracy.* Balanced accuracy is the average recall over the classes, so every class
+  counts equally. Plain accuracy is reported only for context; with weighted training it can be lower than
+  always guessing the majority class, and that is expected.
+- *A fixed epoch budget instead of early stopping.* Early stopping on the fold being scored would quietly tune on
+  it. Instead, 5, 10, 15 and 20 epochs were each tried once, scored on fold 1 (`cv_fold 0`), and the best (5) was
+  then used unchanged for all 5 folds.
+- *Bootstrap confidence intervals.* The cases are resampled with replacement 2,000 times and the metric recomputed
+  each time; the middle 95% of those values is the interval. A gap between two skin-tone groups counts as real only
+  if the interval of the *difference* excludes zero.
+
+**Caveats**
+
+- Choosing the epoch budget on fold 1 makes fold 1's out-of-fold score slightly optimistic, because that fold
+  helped pick the setting. The effect is small (one choice out of four candidates), and folds 2-5 played no part
+  in the choice. The choice itself rests on one fold, so "5 epochs" is a reasonable setting, not a proven optimum.
+- One seed only. Phase 4 repeats the run with 3 seeds to see how much the numbers move.
+
+**What we learned** (numbers in `reports/metrics.json`)
+
+- The baseline is clearly better than chance but weak. It does best on dermatitis, urticaria and folliculitis and
+  worst on psoriasis and tinea, the two smallest classes.
+- Longer training scored worse on the budget fold: without augmentation the model starts memorising its training
+  photos within a few epochs. This is a reason to test augmentation in Phase 5.
+- Surprisingly, the model did worse on the lightest skin group (FST I-II) than on FST III-IV, and that gap is
+  outside the bootstrap noise. The darkest group (FST V-VI) is too small to say anything firm. The groups also have
+  different mixes of conditions, so Phase 4 checks whether the gap is about skin tone or about condition mix.
