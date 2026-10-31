@@ -1,0 +1,51 @@
+# Phase 4: is the skin-tone gap real?
+# The Phase 3 baseline (EfficientNet-B0, no augmentation) rerun with 3 seeds on the
+# same 5 CV folds, then analysed per skin-tone group by src/tone_analysis.py.
+# The test set is never loaded by train.py, image_factors.py or tone_analysis.py.
+
+experiment: baseline_seeds
+seed: 42                         # used for bootstrapping in the analysis
+seeds: [42, 43, 44]              # one full 5-fold CV run per seed
+
+paths:
+  raw_dir: data/raw/scin
+  cases_csv: data/processed/cases.csv
+  split_fingerprint: reports/split_fingerprint.txt
+  image_cache_dir: data/processed/images_256
+  runs_dir: runs
+  # {seed} is replaced by each seed
+  predictions_csv: reports/predictions/seeds/baseline_seed{seed}_oof.csv
+  fold_outputs_dir: reports/predictions/seeds/folds/seed{seed}
+  train_log_json: reports/seeds/baseline_seed{seed}_train_log.json
+  image_factors_csv: reports/predictions/image_factors.csv   # one row per image (case ids: gitignored)
+  metrics_json: reports/metrics.json
+  figures_dir: docs/figures
+
+images:
+  cache_short_side: 256
+  input_size: 224
+  mean: [0.485, 0.456, 0.406]
+  std: [0.229, 0.224, 0.225]
+  augmentation: none
+
+model:
+  name: efficientnet_b0
+  pretrained: true
+
+train:
+  batch_size: 32
+  lr: 3.0e-4
+  weight_decay: 1.0e-4
+  class_weighted_loss: true
+  scheduler: cosine
+  epochs: 5                      # fixed: the budget chosen in Phase 3 on fold 1 (cv_fold 0)
+  num_workers: 4
+  device: auto
+
+evaluation:
+  n_bootstrap: 2000
+  ci_level: 0.95
+
+analysis:
+  focus_class: dermatitis        # the only class with enough cases in every eFST group
+  min_cell_cases: 5              # standardised accuracy is flagged when a tone x class cell is smaller

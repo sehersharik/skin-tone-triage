@@ -16,11 +16,17 @@ ones. Each fold reseeds before training, so a resumed run gives the same
 results as an uninterrupted one. The folder also holds the config it was made
 with; a rerun with a different config stops instead of mixing results.
 
+Several seeds: if the config has a `seeds` list, the whole CV run is repeated
+once per seed on the same folds. `{seed}` in the paths is replaced by the seed,
+and each seed's folds are saved in their own `seed<N>/` subfolder.
+
 Usage:
     python -m src.train --config configs/baseline.yaml
     python -m src.train --config configs/baseline.yaml --fold-outputs-dir /kaggle/working/baseline_folds
+    python -m src.train --config configs/seeds.yaml --fold-outputs-dir /kaggle/working/seed_folds
 """
 import argparse
+import copy
 import json
 import time
 from pathlib import Path
@@ -166,19 +172,24 @@ def sync(device):
         torch.cuda.synchronize()
 
 
-def main():
-    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
-    parser.add_argument("--config", required=True)
-    parser.add_argument("--fold-outputs-dir", help="overrides paths.fold_outputs_dir "
-                        "(e.g. a folder that survives a Kaggle timeout)")
-    args = parser.parse_args()
-    config = load_config(args.config)
+def seed_config(config, seed):
+    """The config for one seed of a multi-seed run: `seed` set, `{seed}` filled in the paths."""
+    config = copy.deepcopy(config)
+    del config["seeds"]
+    config["seed"] = seed
+    config["paths"] = {k: v.format(seed=seed) for k, v in config["paths"].items()}
+    return config
+
+
+def run_cv(config, fold_outputs_dir):
+    """Epoch budget (if not fixed) + 5-fold CV for one seed; writes predictions and the train log."""
     paths, tcfg = config["paths"], config["train"]
-    store = FoldStore(args.fold_outputs_dir or paths["fold_outputs_dir"], config)
+    store = FoldStore(fold_outputs_dir, config)
     set_seed(config["seed"])
     torch.backends.cudnn.benchmark = False
     torch.backends.cudnn.deterministic = True
-    run_dir = start_run(paths["runs_dir"], f"train_{config['experiment']}", config)
+    run_dir = start_run(paths["runs_dir"], f"train_{config['experiment']}_seed{config['seed']}",
+                        config)
 
     cases = load_cv_pool(paths)
     classes = sorted(cases.label.unique())
@@ -245,6 +256,7 @@ def main():
     oof.to_csv(paths["predictions_csv"], index=False)
 
     log = {
+        "seed": config["seed"],
         "classes": classes,
         "n_cases": len(cases), "n_images": len(images),
         "epoch_budget": budget_log,
@@ -256,10 +268,29 @@ def main():
         },
         "torch_version": torch.__version__,
     }
+    Path(paths["train_log_json"]).parent.mkdir(parents=True, exist_ok=True)
     Path(paths["train_log_json"]).write_text(json.dumps(log, indent=2) + "\n")
     save_metrics(run_dir, log)
     oof.to_csv(run_dir / "oof_predictions.csv", index=False)
     print(f"Wrote {paths['predictions_csv']} and {paths['train_log_json']}. Run log: {run_dir}")
+
+
+def main():
+    parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
+    parser.add_argument("--config", required=True)
+    parser.add_argument("--fold-outputs-dir", help="overrides paths.fold_outputs_dir "
+                        "(e.g. a folder that survives a Kaggle timeout)")
+    args = parser.parse_args()
+    config = load_config(args.config)
+    if "seeds" not in config:
+        run_cv(config, args.fold_outputs_dir or config["paths"]["fold_outputs_dir"])
+        return
+    for seed in config["seeds"]:
+        print(f"===== Seed {seed} =====")
+        cfg = seed_config(config, seed)
+        folder = Path(args.fold_outputs_dir) / f"seed{seed}" if args.fold_outputs_dir \
+            else cfg["paths"]["fold_outputs_dir"]
+        run_cv(cfg, folder)
 
 
 if __name__ == "__main__":

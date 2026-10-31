@@ -23,7 +23,8 @@ This is a portfolio project for a Master's in AI application (NUS/NTU). The owne
 - Report uncertainty: 95% bootstrap confidence intervals for test metrics, resampling patients (not images). Say plainly when a difference is within noise, including per-skin-tone differences with small groups.
 - Report negative results honestly. If a technique doesn't help, document it rather than hiding it.
 - Check labels and splits with tests: no patient in two splits, labels match the metadata, augmentation applied to training only.
-- Do not commit, push, or delete files without the owner's explicit permission.
+- Standing permission: at the end of each phase, commit and push code, configs, tests and docs (including results files like `reports/metrics.json` and figures) without asking.
+- Always ask the owner first before deleting files, committing data or images, or force-pushing.
 
 ## Data
 - Primary dataset: SCIN (Google Research), https://github.com/google-research-datasets/scin. Read its README and data-use license before writing download code. Follow its official download instructions; do not guess file layouts.
