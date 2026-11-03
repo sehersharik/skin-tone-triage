@@ -9,8 +9,8 @@ import pytest
 from PIL import Image
 
 from src.app_confidence import confidence_summary
-from src.app_logic import (confidence_state, format_probabilities, prepare_image,
-                           reliability_numbers)
+from src.app_logic import (confidence_state, ensure_weights, format_probabilities,
+                           prepare_image, reliability_numbers, sha256_of)
 from src.utils import load_config
 
 CLASSES = ["dermatitis", "folliculitis", "insect_bite", "psoriasis", "tinea", "urticaria"]
@@ -148,3 +148,24 @@ def test_page_shows_banner_note_and_handles_missing_weights(tmp_path, monkeypatc
     warnings = " ".join(w.value for w in at.warning)
     assert "are not on this machine" in warnings
     assert "Darker skin is poorly tested" in warnings
+
+
+def test_ensure_weights_downloads_only_the_tested_file(tmp_path):
+    source = tmp_path / "release" / "final_baseline.pt"
+    source.parent.mkdir()
+    source.write_bytes(b"pretend weights")
+    url, good = source.as_uri(), sha256_of(source)          # file:// URL: no network needed
+    target = tmp_path / "models" / "final_baseline.pt"
+
+    assert ensure_weights(target, None, good) == "missing"   # inactive: no URL configured
+    assert not target.exists()
+    with pytest.raises(ValueError, match="SHA-256"):
+        ensure_weights(target, url, "0" * 64)                 # wrong fingerprint -> rejected
+    assert not target.exists() and not list(target.parent.glob("*.download"))
+    assert ensure_weights(target, url, good) == "downloaded"
+    assert target.read_bytes() == b"pretend weights"
+    assert ensure_weights(target, url, good) == "present"     # no second download
+
+
+def test_app_config_keeps_the_download_inactive():
+    assert APP_CONFIG["app"]["weights_url"] is None

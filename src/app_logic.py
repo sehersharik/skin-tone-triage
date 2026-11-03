@@ -8,7 +8,9 @@
   then the evaluation transform), entirely in memory.
 - `confidence_state` and `format_probabilities` decide what the page says.
 """
+import hashlib
 import json
+import urllib.request
 from pathlib import Path
 
 import numpy as np
@@ -42,6 +44,37 @@ def prepare_image(file_or_image, cache_short_side):
     image = file_or_image if isinstance(file_or_image, Image.Image) else Image.open(file_or_image)
     image = ImageOps.exif_transpose(image).convert("RGB")      # phones store rotation in EXIF
     return resize_short_side(image, cache_short_side)
+
+
+def sha256_of(path):
+    return hashlib.sha256(Path(path).read_bytes()).hexdigest()
+
+
+def ensure_weights(path, url, expected_sha256, timeout=60):
+    """Make sure the model weights are at `path`. Returns "present", "downloaded" or "missing".
+
+    If the file is missing and `url` is set, download it to a temporary file next to `path`
+    and keep it only if its SHA-256 matches `expected_sha256` (the tested weights); otherwise
+    delete it and raise ValueError. With no `url`, nothing is downloaded.
+    """
+    path = Path(path)
+    if path.exists():
+        return "present"
+    if not url:
+        return "missing"
+    path.parent.mkdir(parents=True, exist_ok=True)
+    tmp = path.with_name(path.name + ".download")
+    try:
+        with urllib.request.urlopen(url, timeout=timeout) as response, open(tmp, "wb") as out:
+            while chunk := response.read(1 << 20):
+                out.write(chunk)
+        if sha256_of(tmp) != expected_sha256:
+            raise ValueError("the downloaded weights are not the ones that were tested "
+                             "(SHA-256 mismatch); they were discarded")
+        tmp.replace(path)
+    finally:
+        tmp.unlink(missing_ok=True)
+    return "downloaded"
 
 
 def _metric(section, name):

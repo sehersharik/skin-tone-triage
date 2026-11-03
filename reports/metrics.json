@@ -4179,5 +4179,241 @@
       "ci_low": 0.3358,
       "ci_high": 0.4179
     }
+  },
+  "calibration_cv": {
+    "description": "Calibration of the seed-42 CV out-of-fold predictions (case level). Temperature scaling is cross-fitted by CV fold. The test set was not used.",
+    "config": "configs/app.yaml",
+    "n_cases": 928,
+    "n_bins": 10,
+    "raw": {
+      "ece": {
+        "value": 0.0399,
+        "ci_low": 0.0362,
+        "ci_high": 0.0821
+      },
+      "brier": {
+        "value": 0.6705,
+        "ci_low": 0.6458,
+        "ci_high": 0.695
+      },
+      "mean_confidence": {
+        "value": 0.497,
+        "ci_low": 0.4865,
+        "ci_high": 0.5072
+      },
+      "accuracy": {
+        "value": 0.4655,
+        "ci_low": 0.4353,
+        "ci_high": 0.4968
+      },
+      "overconfidence_gap": {
+        "value": 0.0315,
+        "ci_low": 0.0011,
+        "ci_high": 0.0607
+      }
+    },
+    "temperature_scaled": {
+      "ece": {
+        "value": 0.0451,
+        "ci_low": 0.038,
+        "ci_high": 0.0844
+      },
+      "brier": {
+        "value": 0.6719,
+        "ci_low": 0.6489,
+        "ci_high": 0.6947
+      },
+      "mean_confidence": {
+        "value": 0.4766,
+        "ci_low": 0.4667,
+        "ci_high": 0.4864
+      },
+      "accuracy": {
+        "value": 0.4655,
+        "ci_low": 0.4353,
+        "ci_high": 0.4968
+      },
+      "overconfidence_gap": {
+        "value": 0.0111,
+        "ci_low": -0.0194,
+        "ci_high": 0.0402
+      }
+    },
+    "temperature_scaled_minus_raw": {
+      "ece": {
+        "difference": 0.0052,
+        "ci_low": -0.0214,
+        "ci_high": 0.024,
+        "outside_noise": false
+      },
+      "brier": {
+        "difference": 0.0013,
+        "ci_low": -0.0005,
+        "ci_high": 0.0033,
+        "outside_noise": false
+      }
+    },
+    "temperature_per_fold": {
+      "0": 1.158,
+      "1": 1.095,
+      "2": 1.05,
+      "3": 1.021,
+      "4": 1.08
+    },
+    "temperature_fitted_on_all_cv": 1.08,
+    "reliability_table": {
+      "raw": [
+        {
+          "bin": "0.0-0.1",
+          "n_cases": 0,
+          "mean_confidence": null,
+          "accuracy": null
+        },
+        {
+          "bin": "0.1-0.2",
+          "n_cases": 0,
+          "mean_confidence": null,
+          "accuracy": null
+        },
+        {
+          "bin": "0.2-0.3",
+          "n_cases": 63,
+          "mean_confidence": 0.27653119619047617,
+          "accuracy": 0.3333333333333333
+        },
+        {
+          "bin": "0.3-0.4",
+          "n_cases": 226,
+          "mean_confidence": 0.35140742336283176,
+          "accuracy": 0.3230088495575221
+        },
+        {
+          "bin": "0.4-0.5",
+          "n_cases": 247,
+          "mean_confidence": 0.44839723469635634,
+          "accuracy": 0.44129554655870445
+        },
+        {
+          "bin": "0.5-0.6",
+          "n_cases": 171,
+          "mean_confidence": 0.5490649539181287,
+          "accuracy": 0.5497076023391813
+        },
+        {
+          "bin": "0.6-0.7",
+          "n_cases": 115,
+          "mean_confidence": 0.6417690323478261,
+          "accuracy": 0.6434782608695652
+        },
+        {
+          "bin": "0.7-0.8",
+          "n_cases": 53,
+          "mean_confidence": 0.7437194673584907,
+          "accuracy": 0.6792452830188679
+        },
+        {
+          "bin": "0.8-0.9",
+          "n_cases": 36,
+          "mean_confidence": 0.8470228238888888,
+          "accuracy": 0.4444444444444444
+        },
+        {
+          "bin": "0.9-1.0",
+          "n_cases": 17,
+          "mean_confidence": 0.9428270394117648,
+          "accuracy": 0.5294117647058824
+        }
+      ],
+      "temperature_scaled": [
+        {
+          "bin": "0.0-0.1",
+          "n_cases": 0,
+          "mean_confidence": null,
+          "accuracy": null
+        },
+        {
+          "bin": "0.1-0.2",
+          "n_cases": 0,
+          "mean_confidence": null,
+          "accuracy": null
+        },
+        {
+          "bin": "0.2-0.3",
+          "n_cases": 91,
+          "mean_confidence": 0.2764002426992774,
+          "accuracy": 0.32967032967032966
+        },
+        {
+          "bin": "0.3-0.4",
+          "n_cases": 241,
+          "mean_confidence": 0.35300438711262205,
+          "accuracy": 0.35684647302904565
+        },
+        {
+          "bin": "0.4-0.5",
+          "n_cases": 244,
+          "mean_confidence": 0.4456813907115196,
+          "accuracy": 0.4672131147540984
+        },
+        {
+          "bin": "0.5-0.6",
+          "n_cases": 186,
+          "mean_confidence": 0.5496995265717798,
+          "accuracy": 0.5752688172043011
+        },
+        {
+          "bin": "0.6-0.7",
+          "n_cases": 76,
+          "mean_confidence": 0.6438881079703539,
+          "accuracy": 0.631578947368421
+        },
+        {
+          "bin": "0.7-0.8",
+          "n_cases": 54,
+          "mean_confidence": 0.7442872570493769,
+          "accuracy": 0.5370370370370371
+        },
+        {
+          "bin": "0.8-0.9",
+          "n_cases": 19,
+          "mean_confidence": 0.8470396190732089,
+          "accuracy": 0.47368421052631576
+        },
+        {
+          "bin": "0.9-1.0",
+          "n_cases": 17,
+          "mean_confidence": 0.931235010733361,
+          "accuracy": 0.5294117647058824
+        }
+      ]
+    },
+    "clearly_overconfident": false,
+    "overconfidence_rule": "mean confidence - accuracy >= 0.05 and its 95% CI excludes 0",
+    "mean_predicted_vs_actual_share": {
+      "dermatitis": {
+        "mean_predicted": 0.3168,
+        "actual_share": 0.5463
+      },
+      "folliculitis": {
+        "mean_predicted": 0.139,
+        "actual_share": 0.0808
+      },
+      "insect_bite": {
+        "mean_predicted": 0.1717,
+        "actual_share": 0.1153
+      },
+      "psoriasis": {
+        "mean_predicted": 0.0922,
+        "actual_share": 0.055
+      },
+      "tinea": {
+        "mean_predicted": 0.0866,
+        "actual_share": 0.0528
+      },
+      "urticaria": {
+        "mean_predicted": 0.1937,
+        "actual_share": 0.1498
+      }
+    }
   }
 }

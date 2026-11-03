@@ -1,0 +1,16 @@
+# Lean, CPU-only dependencies for the Streamlit app (Streamlit Community Cloud uses the
+# requirements file next to the app's entry point). Training and analysis use the root
+# requirements.txt. Versions are the ones the app was tested with; the CPU-only PyTorch
+# index avoids downloading several GB of GPU libraries.
+--extra-index-url https://download.pytorch.org/whl/cpu
+torch==2.15.0+cpu
+torchvision==0.29.2+cpu
+streamlit==1.66.1
+numpy==2.5.4
+pandas==3.1.0
+pillow==13.0.0
+pyyaml==6.0.3
+opencv-python-headless==5.0.0.93   # headless: no GUI libraries needed on a server
+matplotlib==3.11.2
+scikit-learn==1.9.1
+tqdm==4.70.1

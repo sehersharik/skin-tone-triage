@@ -9,3 +9,15 @@ app:
   # at least half the probability. Fixed as a round number, not tuned; src.app_confidence measures
   # how it behaves on the CV out-of-fold predictions (never on the test set).
   low_confidence_threshold: 0.5
+  # Where to download models/final_baseline.pt from if it isn't on the machine (e.g. on Streamlit
+  # Community Cloud). null = never download (current state: no Release has been published).
+  # When set, the file is accepted only if its SHA-256 matches test_final.model_sha256 in
+  # reports/metrics.json, i.e. exactly the weights that were tested.
+  weights_url: null
+
+calibration:                   # src.calibration, on the seed-42 CV out-of-fold predictions only
+  n_bins: 10                   # equal-width bins of the top-class probability
+  # "Clearly overconfident" (decided before running src.calibration): the mean top-class
+  # probability exceeds the accuracy by at least this much, and the 95% CI of that gap excludes 0.
+  overconfidence_margin: 0.05
+  temperature_grid: [0.25, 4.0, 200]   # log-spaced search range and number of points

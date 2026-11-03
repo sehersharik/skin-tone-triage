@@ -9,7 +9,6 @@ Usage (from the repo root):
     streamlit run app/streamlit_app.py -- --config configs/app.yaml
 """
 import argparse
-import hashlib
 import os
 import sys
 from pathlib import Path
@@ -25,8 +24,9 @@ import torch  # noqa: E402
 from PIL import UnidentifiedImageError  # noqa: E402
 from torchvision import transforms as T  # noqa: E402
 
-from src.app_logic import (ci_text, confidence_state, format_probabilities, pct_text,  # noqa: E402
-                           prepare_image, pretty, reliability_numbers)
+from src.app_logic import (ci_text, confidence_state, ensure_weights,  # noqa: E402
+                           format_probabilities, pct_text, prepare_image, pretty,
+                           reliability_numbers, sha256_of)
 from src.gradcam import GradCAM, overlay  # noqa: E402
 from src.models import build_model  # noqa: E402
 from src.transforms import eval_transform  # noqa: E402
@@ -52,8 +52,7 @@ def load_model(weights_path, n_classes, model_name, target_layer):
     model = build_model(model_name, n_classes, pretrained=False)
     model.load_state_dict(torch.load(path, map_location="cpu"))
     model.eval()
-    sha = hashlib.sha256(path.read_bytes()).hexdigest()
-    return model, GradCAM(model, model.get_submodule(target_layer)), sha
+    return model, GradCAM(model, model.get_submodule(target_layer)), sha256_of(path)
 
 
 def reliability_note(r, ci_level):
@@ -104,6 +103,11 @@ def main():
                 "conditions**: " + ", ".join(pretty(c) for c in classes) + ".")
     st.caption("This app processes your photo in memory and does not save it.")
 
+    try:
+        with st.spinner("Getting the model weights..."):
+            ensure_weights(paths["final_model"], app_cfg.get("weights_url"), r["model_sha256"])
+    except (OSError, ValueError) as err:
+        st.error(f"Couldn't get the model weights: {err}")
     loaded = load_model(paths["final_model"], len(classes), config["model"]["name"],
                         config["gradcam"]["target_layer"])
     if loaded is None:

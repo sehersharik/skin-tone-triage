@@ -328,3 +328,70 @@ the model mostly uses the skin, and when it is wrong, background and clothing ar
   gradients crashed. Phase 6 always ran with gradients, so its results were not affected. A test now covers it.
 - A photo the model was trained on gets a near-100% answer. That shows the page works, not that the model is
   accurate; only the test-set numbers say that.
+
+## Phase 9: Calibration check, deployment prep and the write-up
+
+**What was built**
+
+- `src/calibration.py`: checks whether the model's probabilities can be taken at face value, on CV predictions
+  only. A *reliability table* groups cases by the model's top probability and compares it with how often the model
+  was actually right; *ECE* averages that mismatch; the *Brier score* measures probability accuracy overall.
+  *Temperature scaling* (dividing the model's log-probabilities by a number T, which softens or sharpens them) was
+  fitted per CV fold so no case was scaled by a T fitted on itself.
+- Deployment prep, inactive until the owner publishes the weights: `app/requirements.txt` (CPU-only PyTorch),
+  a download that only keeps the file whose SHA-256 matches the tested weights, `docs/DEPLOY.md`, and the model
+  card `docs/MODEL_CARD.md`.
+- `src/make_docs.py`: the README and model card are generated from templates in `docs/templates/`, with every
+  number filled in from `reports/metrics.json`. A test fails if they drift apart.
+
+**What we learned**
+
+- Overall the probabilities are close to honest (slightly overconfident, below the bar set in advance for "clearly
+  overconfident"), but very high probabilities are not: cases above 80% were right only about half the time.
+  Temperature scaling didn't help, because one global T can't fix just the top end.
+- The class-weighted loss makes the probabilities behave as if all conditions were equally common, so the
+  model gives dermatitis much less probability than its real share. That is a side effect of choosing balanced
+  accuracy as the target, and worth saying out loud.
+
+## Interview preparation: the 5 questions you're most likely to get
+
+Quote numbers from the README tables (they come from `reports/metrics.json`), always with their interval.
+
+**1. "Your accuracy is low. Is the model any good?"**
+Start with what the number means: 6 classes, so guessing at random gives about 0.17 balanced accuracy; the model
+is clearly above that on the test set, and the test result agrees with cross-validation. Then say why it isn't
+higher: consumer phone photos (not clinic images), labels that are dermatologists' best guesses from photos alone,
+heavy class imbalance, and a deliberately simple model. Finish with the point of the project: "I optimised for
+an honest, reproducible number with error bars, not for a high one. A modest result you can trust is more useful
+than an impressive one you can't."
+
+**2. "How do you know you didn't overfit to the test set?"**
+Walk through the safeguards in order: splits by case (with cases sharing a photo kept together) so no person is in
+two splits; a fingerprint check that the splits never changed; every choice (epochs, image processing, final
+setting) made with cross-validation only; a selection rule written down before Phase 5 results existed; the
+evaluation code committed before scoring; and a guard that refuses to score the test set twice. The evidence that
+it worked: test and CV agree within the noise.
+
+**3. "Does it work worse on darker skin?"**
+Be precise, because this is the heart of the project. "In cross-validation it actually looked worse on *lighter*
+skin. When I held the condition fixed (dermatitis only, standardising the condition mix, and a regression with
+condition as a covariate) most of that gap disappeared; what was left came mainly from psoriasis and tinea on light
+skin, and it didn't clearly reappear on the test set. For the darkest skin (FST V-VI) there are too few cases to
+say anything: the test interval runs from very poor to above average. So the honest answer is 'unknown', and the app
+says so to every user rather than guessing their skin tone." Then say what you'd do: external data with more
+darker skin, such as DermaCon-IN.
+
+**4. "Augmentation improved F1 and AUC. Why didn't you use it?"**
+"Because I'd decided the rule before seeing the results: improve overall balanced accuracy beyond the noise
+without hurting any skin-tone group. Augmentation missed that bar. With about 60 comparisons, some will look
+significant by chance, and switching to whichever metric happens to look good is exactly how results become
+over-optimistic. I report it as a promising secondary finding, and the right next step is a pre-registered
+confirmation run, not a quiet switch."
+
+**5. "What does Grad-CAM show, and can you trust it?"**
+Explain it in one breath: "It takes the gradient of the predicted class's score with respect to the last
+convolutional feature maps, weights each map by its average gradient, and shows where those maps were active."
+Then the finding: when the model is right, it mostly looks at the lesion, on all skin tones; when it is wrong, it
+often looks at clothing, backgrounds or blacked-out areas, and a measured border share confirms that wrong cases
+look at the edges more. Then the limits, which interviewers want to hear: the map is coarse (7x7), it shows where
+the model looked, not why it was right, and the heatmaps came from the final model, which had seen those photos.
