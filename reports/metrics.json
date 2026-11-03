@@ -3599,5 +3599,68 @@
       }
     },
     "multiple_comparisons_note": "60 paired comparisons are reported. At a 95% level about 1 in 20 differences with no real effect will still look outside the noise, so a single isolated 'outside the noise' result, especially in a small group, is weak evidence."
+  },
+  "phase6_gradcam": {
+    "description": "Phase 6. Grad-CAM from the final baseline model (trained on the whole CV pool) on every CV image, toward the class the seed-42 out-of-fold model predicted. Correct / incorrect = out-of-fold. The test set was not used.",
+    "config": "configs/final.yaml",
+    "final_model": {
+      "seed": 42,
+      "epochs": 5,
+      "n_cases": 928,
+      "n_images": 2054,
+      "seconds": 58.3,
+      "gpu": "Tesla T4",
+      "torch_version": "2.11.0+cu130"
+    },
+    "target_layer": "features.8",
+    "n_images": 2054,
+    "border_fraction": 0.1,
+    "border_share_if_uniform": 0.3543,
+    "border_share_by_group": {
+      "all": {
+        "n_cases": 928,
+        "mean": 0.1934,
+        "ci_low": 0.1855,
+        "ci_high": 0.2018
+      },
+      "FST I-II, correct": {
+        "n_cases": 176,
+        "mean": 0.1369,
+        "ci_low": 0.1241,
+        "ci_high": 0.1506
+      },
+      "FST I-II, incorrect": {
+        "n_cases": 226,
+        "mean": 0.2329,
+        "ci_low": 0.2154,
+        "ci_high": 0.2529
+      },
+      "FST III-IV, correct": {
+        "n_cases": 211,
+        "mean": 0.1449,
+        "ci_low": 0.134,
+        "ci_high": 0.1561
+      },
+      "FST III-IV, incorrect": {
+        "n_cases": 214,
+        "mean": 0.2523,
+        "ci_low": 0.2318,
+        "ci_high": 0.272
+      },
+      "FST V-VI, correct": {
+        "n_cases": 35,
+        "mean": 0.1425,
+        "ci_low": 0.1155,
+        "ci_high": 0.1699
+      },
+      "FST V-VI, incorrect": {
+        "n_cases": 26,
+        "mean": 0.2505,
+        "ci_low": 0.2074,
+        "ci_high": 0.296
+      }
+    },
+    "share_of_images_peaking_in_border": 0.1811,
+    "note": "border_share = share of the heatmap's mass in the outer border band. If the model looked everywhere equally it would equal border_share_if_uniform; much higher would suggest it relies on borders, backgrounds or framing."
   }
 }

@@ -217,3 +217,45 @@ Plain-English notes on what was built in each phase and why.
   of choice the rule exists to prevent.
 - Workflow lesson: Kaggle's "Save to GitHub" sync committed the executed notebook to `main` and caused a push
   conflict. Results now come back only as the downloaded zip.
+
+## Phase 6: Explainability (Grad-CAM)
+
+**What was built**
+
+- `src/train_final.py` + `configs/final.yaml`: the frozen method (the baseline, 5 epochs, seed 42) trained once on
+  all 928 CV cases. The weights are in `models/`, kept out of git.
+- `src/gradcam.py`: Grad-CAM on the last convolutional layer. For a chosen class it asks which parts of the
+  7x7 feature map raised that class's score, and upsamples the answer to the photo. Bright = pushed the score up.
+- Grids (in `reports/gradcam/`, not in git because they show patient photos): random cases per skin-tone group,
+  correct and incorrect, one per condition and two each for psoriasis and tinea. Wrong predictions show two
+  heatmaps: toward the wrong answer and toward the true condition.
+- A photo-free check committed to the repo: the average heatmap per FST group (`docs/figures/phase6_mean_gradcam.png`)
+  and the *border share*, the share of each heatmap that falls in the outer 10% of the image
+  (`phase6_gradcam` in `reports/metrics.json`). If the model looked everywhere equally, that share would be about
+  35%.
+
+**Why it was built this way**
+
+- *Correct vs incorrect comes from out-of-fold predictions*, made by models that never saw the case. The heatmaps
+  come from the final model, which *did* train on these cases, so they show where the frozen model looks, not
+  how well it generalises. The test set is still untouched.
+- *Random picks, not the clearest examples*, so the grids aren't flattering by design.
+- *A number, not just pictures.* Looking at 44 heatmaps is easy to over-read. The border share is measured on all
+  2,054 CV images, so it can confirm or contradict what the grids seem to show.
+
+**What the model seems to focus on**
+
+When the cross-validation models got a case right, the final model's heatmap usually sits on the affected skin:
+the psoriasis plaque, the bite mark, the edge of a tinea patch, the cluster of folliculitis spots. For widespread
+conditions like dermatitis and urticaria it spreads along the limb. This looks much the same on light, medium and
+dark skin, and the average heatmap is a central blob in all three FST groups. When the prediction was wrong, the
+heatmap toward the wrong answer often sits away from the lesion. In the grids it lands on **clothing** (a pink
+strap, a grey T-shirt held up by the person, a black top), on **background objects** (blue toys, floor tiles, a
+bright door frame, a blanket) and on **image edges and black blank areas** where part of the photo is blacked
+out. The measurements agree: incorrectly predicted cases have clearly more heatmap mass in the border than correct
+ones, in every FST group. Overall the border share is well below what even attention would give, so the model
+mostly looks at the middle of the photo, where people usually put the lesion. **No rulers appeared in the cases
+shown** (these are consumer phone photos), but 44 cases can't rule them out. Three cautions: a 7x7 map is coarse (each cell covers about 32
+pixels), so "on the lesion" means "in that region"; a central focus partly reflects how people frame photos;
+and the border share can't detect clothing or background in the middle of the image. The fair summary is that
+the model mostly uses the skin, and when it is wrong, background and clothing are a likely part of why.
