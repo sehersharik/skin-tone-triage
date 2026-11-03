@@ -3680,7 +3680,7 @@
     "device": "cpu",
     "torch_version": "2.15.0",
     "evaluated_at": "2026-11-03T14:21:28",
-    "git_commit": "dacc531",
+    "git_commit": "0cc334f",
     "run_dir": "runs/20261103_142010_test_final",
     "overall": {
       "n_cases": 233,
@@ -4158,6 +4158,7 @@
           "outside_noise": false
         }
       }
-    }
+    },
+    "git_commit_note": "Scored with commit dacc531, which was rebased before pushing and became 0cc334f; src/, configs/ and tests/ are byte-identical in both."
   }
 }
