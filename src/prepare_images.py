@@ -7,6 +7,7 @@ The training transforms then work on these small files.
 
 Usage:
     python -m src.prepare_images --config configs/baseline.yaml
+    python -m src.prepare_images --config configs/test.yaml --split test   # test images only
 """
 import argparse
 from concurrent.futures import ThreadPoolExecutor
@@ -33,11 +34,15 @@ def cache_path(cache_dir, image_path):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--config", required=True)
+    parser.add_argument("--split", choices=["all", "cv", "test"], default="all",
+                        help="only cache the images of this split")
     args = parser.parse_args()
     config = load_config(args.config)
     paths, short_side = config["paths"], config["images"]["cache_short_side"]
 
     cases = pd.read_csv(paths["cases_csv"], dtype={"case_id": str})
+    if args.split != "all":
+        cases = cases[cases.split == args.split]
     image_paths = case_images(cases).image_path.unique()
     Path(paths["image_cache_dir"]).mkdir(parents=True, exist_ok=True)
 

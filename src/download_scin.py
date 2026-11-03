@@ -11,6 +11,7 @@ in scin_cases.csv can be joined onto raw_dir directly.
 Usage:
     python -m src.download_scin --config configs/data.yaml
     python -m src.download_scin --config configs/data.yaml --images used   # after build_metadata
+    python -m src.download_scin --config configs/data.yaml --images test   # test-split images only
 """
 import argparse
 from concurrent.futures import ThreadPoolExecutor
@@ -46,7 +47,7 @@ def image_paths_from_cases(cases_csv, path_columns):
 def main():
     parser = argparse.ArgumentParser(description=__doc__.splitlines()[0])
     parser.add_argument("--config", required=True)
-    parser.add_argument("--images", choices=["all", "used", "sample", "none"],
+    parser.add_argument("--images", choices=["all", "used", "test", "sample", "none"],
                         help="override download.images from the config")
     args = parser.parse_args()
 
@@ -72,11 +73,13 @@ def main():
     all_paths = image_paths_from_cases(cases_csv, scin["image_path_columns"])
     if dl["images"] == "all":
         wanted = all_paths
-    elif dl["images"] == "used":
+    elif dl["images"] in ("used", "test"):   # test = only the test split's images
         cases_csv_used = Path(config["paths"]["cases_csv"])
         if not cases_csv_used.exists():
             raise SystemExit(f"{cases_csv_used} not found: run src.build_metadata first")
         cases = pd.read_csv(cases_csv_used, dtype={"case_id": str})
+        if dl["images"] == "test":
+            cases = cases[cases.split == "test"]
         wanted = sorted(case_images(cases).image_path.unique())
     elif dl["images"] == "sample":
         wanted = sorted(pd.Series(all_paths)

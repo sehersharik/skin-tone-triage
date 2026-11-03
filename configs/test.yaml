@@ -1,0 +1,19 @@
+# Phase 7: the ONE-TIME test-set evaluation of the frozen method.
+# Frozen method = configs/final.yaml (baseline EfficientNet-B0, ImageNet weights, no augmentation,
+# 5 epochs, seed 42), trained on all 928 CV cases -> models/final_baseline.pt.
+# src.test_eval refuses to run again once a result exists, unless it is given
+# --overwrite-test-result (to be used only on the owner's explicit instruction).
+
+base: configs/final.yaml
+experiment: test_final
+
+paths:
+  test_predictions_csv: reports/predictions/test/final_test_predictions.csv   # case ids: gitignored
+  cv_predictions_csv: reports/predictions/final/baseline_seed42_oof.csv       # for the CV comparison
+
+train:
+  device: cpu                  # deterministic, and 233 cases are quick on a laptop
+  num_workers: 0
+
+test:
+  small_group_cases: 30        # groups smaller than this are flagged as weak evidence

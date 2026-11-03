@@ -105,7 +105,8 @@ def evaluate_groups(df, group_col, order, classes, eval_cfg, rng):
     return results, gaps
 
 
-def plot_confusion(cm, classes, path):
+def plot_confusion(cm, classes, path,
+                   title="Baseline confusion matrix (CV out-of-fold, cases)\ncount and % of true class"):
     cm = np.asarray(cm)
     row_pct = cm / cm.sum(axis=1, keepdims=True)
     fig, ax = plt.subplots(figsize=(6.5, 5.5))
@@ -116,12 +117,12 @@ def plot_confusion(cm, classes, path):
                     color="white" if row_pct[i, j] > 0.55 else "#0b0b0b")
     ax.set_xticks(range(len(classes)), classes, rotation=35, ha="right")
     ax.set_yticks(range(len(classes)), classes)
-    ax.set(xlabel="predicted", ylabel="true",
-           title="Baseline confusion matrix (CV out-of-fold, cases)\ncount and % of true class")
+    ax.set(xlabel="predicted", ylabel="true", title=title)
     fig.tight_layout(); fig.savefig(path, dpi=130); plt.close(fig)
 
 
-def plot_groups(section, path):
+def plot_groups(section, path, title="Baseline by skin-tone group (CV out-of-fold, "
+                                    "95% bootstrap CI; dashed = overall)"):
     """Point estimate and 95% CI per skin-tone group, one panel per metric."""
     rows = [(g, "eFST", section["by_efst_group"][g]) for g in EFST_ORDER] + \
            [(g, "Monk (US)", section["by_monk_group"][g]) for g in MONK_ORDER]
@@ -143,8 +144,7 @@ def plot_groups(section, path):
     # One shared legend below the panels, so it can never cover a data point
     fig.legend(*axes[0].get_legend_handles_labels(), loc="lower center", ncol=2, fontsize=8,
                frameon=False)
-    fig.suptitle("Baseline by skin-tone group (CV out-of-fold, 95% bootstrap CI; dashed = overall)",
-                 fontsize=10)
+    fig.suptitle(title, fontsize=10)
     fig.tight_layout(rect=(0, 0.06, 1, 1)); fig.savefig(path, dpi=130); plt.close(fig)
 
 
