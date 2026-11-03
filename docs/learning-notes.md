@@ -259,3 +259,42 @@ shown** (these are consumer phone photos), but 44 cases can't rule them out. Thr
 pixels), so "on the lesion" means "in that region"; a central focus partly reflects how people frame photos;
 and the border share can't detect clothing or background in the middle of the image. The fair summary is that
 the model mostly uses the skin, and when it is wrong, background and clothing are a likely part of why.
+
+## Phase 7: The one-time test-set evaluation
+
+**What was built**
+
+- `src/test_eval.py` + `configs/test.yaml`: scores the frozen method (`models/final_baseline.pt`, the baseline
+  trained on all 928 CV cases) on the 233 test cases, case level, with the same metrics as the CV evaluation,
+  overall and per FST and Monk group, 95% bootstrap CIs (cases resampled), and a test-vs-CV comparison. Results
+  are in `reports/metrics.json` (`test_final`) plus two figures.
+- A guard: the script refuses to run once a test result exists, unless it is given `--overwrite-test-result`,
+  so the test set can't be reused by accident.
+- Tests: the guard; scoring twice on synthetic data gives identical numbers; and re-scoring the saved real
+  test predictions reproduces `metrics.json` exactly.
+
+**Why it was built this way**
+
+- *The test set is scored once, for a method frozen in advance.* Every choice (model, image processing, epochs)
+  was made on CV results. Looking at test results and then changing something would turn the test set into a
+  second validation set, and its numbers would be optimistic again.
+- *The code was committed before the scoring*, and the result records that commit, the model file's SHA-256
+  fingerprint and the software versions. Anyone can check which code and which model produced the numbers.
+- *Run on a laptop CPU.* 233 cases take about a minute, and CPU arithmetic gives exactly the same numbers on a
+  rerun.
+
+**What we learned** (numbers in `reports/metrics.json`, `test_final`)
+
+- **The test numbers agree with cross-validation.** Test balanced accuracy and AUC are a little higher than the
+  seed-42 CV values, but every test-minus-CV difference is within the noise. A small rise is expected: the final
+  model trained on all CV cases, a quarter more data than each CV model. The test set has only 233 cases, so
+  its confidence intervals are wide.
+- The per-condition pattern matches CV: urticaria and insect bites are recognised best, psoriasis and tinea worst,
+  and dermatitis is often confused with urticaria, insect bites and tinea.
+- **The FST I-II vs III-IV gap seen in CV does not show up clearly on the test set**: the difference is within
+  the noise, which fits the Phase 4 conclusion that it was mostly condition-specific and borderline.
+- **FST V-VI scored much lower on the test set, but this is weak evidence.** It has only 15 test cases and no
+  folliculitis, and its confidence interval runs from very poor to above average. It can't be dismissed either:
+  it is one more reason the app's reliability note for darker skin must say plainly that the model is untested
+  there.
+- Monk 7-10 has only 3 test cases, all dermatitis: no conclusion is possible, and AUC can't even be computed.

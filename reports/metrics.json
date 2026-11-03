@@ -3662,5 +3662,502 @@
     },
     "share_of_images_peaking_in_border": 0.1811,
     "note": "border_share = share of the heatmap's mass in the outer border band. If the model looked everywhere equally it would equal border_share_if_uniform; much higher would suggest it relies on borders, backgrounds or framing."
+  },
+  "test_final": {
+    "description": "Phase 7. The one-time test-set evaluation of the frozen method (baseline EfficientNet-B0, ImageNet weights, no augmentation, 5 epochs, seed 42) trained on all CV cases. Case level; 95% bootstrap CIs resample cases.",
+    "config": "configs/test.yaml",
+    "model_file": "models/final_baseline.pt",
+    "model_sha256": "375c7ff779b3050c9d11e988cd82820fd37940718e6b31438c4844bca48b5f44",
+    "model_info": {
+      "seed": 42,
+      "epochs": 5,
+      "n_cases": 928,
+      "n_images": 2054,
+      "torch_version": "2.11.0+cu130"
+    },
+    "n_cases": 233,
+    "n_images": 484,
+    "device": "cpu",
+    "torch_version": "2.15.0",
+    "evaluated_at": "2026-11-03T14:21:28",
+    "git_commit": "dacc531",
+    "run_dir": "runs/20261103_142010_test_final",
+    "overall": {
+      "n_cases": 233,
+      "cases_per_class": {
+        "dermatitis": 128,
+        "folliculitis": 17,
+        "insect_bite": 27,
+        "psoriasis": 14,
+        "tinea": 11,
+        "urticaria": 36
+      },
+      "balanced_accuracy": {
+        "value": 0.4538,
+        "ci_low": 0.3683,
+        "ci_high": 0.5417
+      },
+      "macro_f1": {
+        "value": 0.4044,
+        "ci_low": 0.3284,
+        "ci_high": 0.4803
+      },
+      "macro_auc_ovr": {
+        "value": 0.7861,
+        "ci_low": 0.7366,
+        "ci_high": 0.8328
+      }
+    },
+    "per_class_recall": {
+      "dermatitis": 0.4766,
+      "folliculitis": 0.4118,
+      "insect_bite": 0.5185,
+      "psoriasis": 0.2857,
+      "tinea": 0.3636,
+      "urticaria": 0.6667
+    },
+    "confusion_matrix": {
+      "labels": [
+        "dermatitis",
+        "folliculitis",
+        "insect_bite",
+        "psoriasis",
+        "tinea",
+        "urticaria"
+      ],
+      "rows_true_cols_pred": [
+        [
+          61,
+          11,
+          19,
+          2,
+          15,
+          20
+        ],
+        [
+          5,
+          7,
+          3,
+          1,
+          0,
+          1
+        ],
+        [
+          4,
+          1,
+          14,
+          3,
+          1,
+          4
+        ],
+        [
+          1,
+          5,
+          2,
+          4,
+          1,
+          1
+        ],
+        [
+          4,
+          0,
+          1,
+          1,
+          4,
+          1
+        ],
+        [
+          5,
+          2,
+          4,
+          0,
+          1,
+          24
+        ]
+      ]
+    },
+    "by_efst_group": {
+      "FST I-II": {
+        "n_cases": 102,
+        "cases_per_class": {
+          "dermatitis": 58,
+          "folliculitis": 7,
+          "insect_bite": 14,
+          "psoriasis": 5,
+          "tinea": 5,
+          "urticaria": 13
+        },
+        "balanced_accuracy": {
+          "value": 0.4464,
+          "ci_low": 0.3151,
+          "ci_high": 0.5947
+        },
+        "macro_f1": {
+          "value": 0.3983,
+          "ci_low": 0.2809,
+          "ci_high": 0.5013
+        },
+        "macro_auc_ovr": {
+          "value": 0.8181,
+          "ci_low": 0.7473,
+          "ci_high": 0.8821
+        }
+      },
+      "FST III-IV": {
+        "n_cases": 106,
+        "cases_per_class": {
+          "dermatitis": 55,
+          "folliculitis": 10,
+          "insect_bite": 11,
+          "psoriasis": 7,
+          "tinea": 5,
+          "urticaria": 18
+        },
+        "balanced_accuracy": {
+          "value": 0.4907,
+          "ci_low": 0.3537,
+          "ci_high": 0.6219
+        },
+        "macro_f1": {
+          "value": 0.4334,
+          "ci_low": 0.3038,
+          "ci_high": 0.538
+        },
+        "macro_auc_ovr": {
+          "value": 0.7654,
+          "ci_low": 0.6834,
+          "ci_high": 0.8378
+        }
+      },
+      "FST V-VI": {
+        "n_cases": 15,
+        "cases_per_class": {
+          "dermatitis": 10,
+          "folliculitis": 0,
+          "insect_bite": 1,
+          "psoriasis": 1,
+          "tinea": 1,
+          "urticaria": 2
+        },
+        "balanced_accuracy": {
+          "value": 0.2,
+          "ci_low": 0.0667,
+          "ci_high": 0.5417
+        },
+        "macro_f1": {
+          "value": 0.1694,
+          "ci_low": 0.0857,
+          "ci_high": 0.4713
+        },
+        "macro_auc_ovr": {
+          "value": 0.7782,
+          "ci_low": 0.5548,
+          "ci_high": 0.9638
+        }
+      },
+      "excluded_missing_group": 10
+    },
+    "efst_gaps": {
+      "FST III-IV minus FST I-II": {
+        "balanced_accuracy": {
+          "difference": 0.0443,
+          "ci_low": -0.1507,
+          "ci_high": 0.2237,
+          "outside_noise": false
+        },
+        "macro_f1": {
+          "difference": 0.0351,
+          "ci_low": -0.1301,
+          "ci_high": 0.1892,
+          "outside_noise": false
+        },
+        "macro_auc_ovr": {
+          "difference": -0.0527,
+          "ci_low": -0.1546,
+          "ci_high": 0.0507,
+          "outside_noise": false
+        }
+      },
+      "FST V-VI minus FST I-II": {
+        "balanced_accuracy": {
+          "difference": -0.2464,
+          "ci_low": -0.4361,
+          "ci_high": 0.1278,
+          "outside_noise": false
+        },
+        "macro_f1": {
+          "difference": -0.2289,
+          "ci_low": -0.3476,
+          "ci_high": 0.0889,
+          "outside_noise": false
+        },
+        "macro_auc_ovr": {
+          "difference": -0.0399,
+          "ci_low": -0.2718,
+          "ci_high": 0.1628,
+          "outside_noise": false
+        }
+      },
+      "FST V-VI minus FST III-IV": {
+        "balanced_accuracy": {
+          "difference": -0.2907,
+          "ci_low": -0.4748,
+          "ci_high": 0.0845,
+          "outside_noise": false
+        },
+        "macro_f1": {
+          "difference": -0.264,
+          "ci_low": -0.3796,
+          "ci_high": 0.0637,
+          "outside_noise": false
+        },
+        "macro_auc_ovr": {
+          "difference": 0.0128,
+          "ci_low": -0.2295,
+          "ci_high": 0.2175,
+          "outside_noise": false
+        }
+      }
+    },
+    "by_monk_group": {
+      "Monk 1-3": {
+        "n_cases": 170,
+        "cases_per_class": {
+          "dermatitis": 94,
+          "folliculitis": 11,
+          "insect_bite": 23,
+          "psoriasis": 10,
+          "tinea": 8,
+          "urticaria": 24
+        },
+        "balanced_accuracy": {
+          "value": 0.4834,
+          "ci_low": 0.3819,
+          "ci_high": 0.5988
+        },
+        "macro_f1": {
+          "value": 0.4171,
+          "ci_low": 0.3274,
+          "ci_high": 0.5076
+        },
+        "macro_auc_ovr": {
+          "value": 0.8067,
+          "ci_low": 0.751,
+          "ci_high": 0.86
+        }
+      },
+      "Monk 4-6": {
+        "n_cases": 59,
+        "cases_per_class": {
+          "dermatitis": 30,
+          "folliculitis": 6,
+          "insect_bite": 4,
+          "psoriasis": 4,
+          "tinea": 3,
+          "urticaria": 12
+        },
+        "balanced_accuracy": {
+          "value": 0.375,
+          "ci_low": 0.2331,
+          "ci_high": 0.5394
+        },
+        "macro_f1": {
+          "value": 0.3605,
+          "ci_low": 0.2138,
+          "ci_high": 0.499
+        },
+        "macro_auc_ovr": {
+          "value": 0.7132,
+          "ci_low": 0.5849,
+          "ci_high": 0.8313
+        }
+      },
+      "Monk 7-10": {
+        "n_cases": 3,
+        "cases_per_class": {
+          "dermatitis": 3,
+          "folliculitis": 0,
+          "insect_bite": 0,
+          "psoriasis": 0,
+          "tinea": 0,
+          "urticaria": 0
+        },
+        "balanced_accuracy": {
+          "value": 0.6667,
+          "ci_low": 0.0,
+          "ci_high": 1.0
+        },
+        "macro_f1": {
+          "value": 0.8,
+          "ci_low": 0.0,
+          "ci_high": 1.0
+        },
+        "macro_auc_ovr": {
+          "value": NaN,
+          "ci_low": NaN,
+          "ci_high": NaN
+        }
+      },
+      "excluded_missing_group": 1
+    },
+    "monk_gaps": {
+      "Monk 4-6 minus Monk 1-3": {
+        "balanced_accuracy": {
+          "difference": -0.1084,
+          "ci_low": -0.2836,
+          "ci_high": 0.0837,
+          "outside_noise": false
+        },
+        "macro_f1": {
+          "difference": -0.0566,
+          "ci_low": -0.2229,
+          "ci_high": 0.103,
+          "outside_noise": false
+        },
+        "macro_auc_ovr": {
+          "difference": -0.0935,
+          "ci_low": -0.2357,
+          "ci_high": 0.0366,
+          "outside_noise": false
+        }
+      },
+      "Monk 7-10 minus Monk 1-3": {
+        "balanced_accuracy": {
+          "difference": 0.1833,
+          "ci_low": -0.4502,
+          "ci_high": 0.5868,
+          "outside_noise": false
+        },
+        "macro_f1": {
+          "difference": 0.3829,
+          "ci_low": -0.3804,
+          "ci_high": 0.6449,
+          "outside_noise": false
+        },
+        "macro_auc_ovr": {
+          "difference": NaN,
+          "ci_low": NaN,
+          "ci_high": NaN,
+          "outside_noise": false
+        }
+      },
+      "Monk 7-10 minus Monk 4-6": {
+        "balanced_accuracy": {
+          "difference": 0.2917,
+          "ci_low": -0.3472,
+          "ci_high": 0.7262,
+          "outside_noise": false
+        },
+        "macro_f1": {
+          "difference": 0.4395,
+          "ci_low": -0.3314,
+          "ci_high": 0.7518,
+          "outside_noise": false
+        },
+        "macro_auc_ovr": {
+          "difference": NaN,
+          "ci_low": NaN,
+          "ci_high": NaN,
+          "outside_noise": false
+        }
+      }
+    },
+    "small_groups": {
+      "efst": {
+        "FST I-II": {
+          "n_cases": 102,
+          "classes_absent": [],
+          "weak_evidence": false
+        },
+        "FST III-IV": {
+          "n_cases": 106,
+          "classes_absent": [],
+          "weak_evidence": false
+        },
+        "FST V-VI": {
+          "n_cases": 15,
+          "classes_absent": [
+            "folliculitis"
+          ],
+          "weak_evidence": true
+        }
+      },
+      "monk": {
+        "Monk 1-3": {
+          "n_cases": 170,
+          "classes_absent": [],
+          "weak_evidence": false
+        },
+        "Monk 4-6": {
+          "n_cases": 59,
+          "classes_absent": [],
+          "weak_evidence": false
+        },
+        "Monk 7-10": {
+          "n_cases": 3,
+          "classes_absent": [
+            "folliculitis",
+            "insect_bite",
+            "psoriasis",
+            "tinea",
+            "urticaria"
+          ],
+          "weak_evidence": true
+        }
+      }
+    },
+    "cv_comparison": {
+      "cv_source": "seed-42 out-of-fold predictions on the CV pool (the same procedure, models trained on 4 of 5 folds)",
+      "metrics": {
+        "balanced_accuracy": {
+          "test": {
+            "value": 0.4538,
+            "ci_low": 0.3683,
+            "ci_high": 0.5417
+          },
+          "cv": {
+            "value": 0.3806,
+            "ci_low": 0.3416,
+            "ci_high": 0.4205
+          },
+          "test_minus_cv": 0.0732,
+          "ci_low": -0.0197,
+          "ci_high": 0.1719,
+          "outside_noise": false
+        },
+        "macro_f1": {
+          "test": {
+            "value": 0.4044,
+            "ci_low": 0.3284,
+            "ci_high": 0.4803
+          },
+          "cv": {
+            "value": 0.3557,
+            "ci_low": 0.3183,
+            "ci_high": 0.3924
+          },
+          "test_minus_cv": 0.0487,
+          "ci_low": -0.0347,
+          "ci_high": 0.1355,
+          "outside_noise": false
+        },
+        "macro_auc_ovr": {
+          "test": {
+            "value": 0.7861,
+            "ci_low": 0.7366,
+            "ci_high": 0.8328
+          },
+          "cv": {
+            "value": 0.751,
+            "ci_low": 0.7265,
+            "ci_high": 0.7754
+          },
+          "test_minus_cv": 0.0351,
+          "ci_low": -0.0187,
+          "ci_high": 0.0883,
+          "outside_noise": false
+        }
+      }
+    }
   }
 }
