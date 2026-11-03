@@ -1,0 +1,11 @@
+# Phase 8: the Streamlit demo app. CPU inference with the frozen model (configs/final.yaml).
+# Every performance number the app shows is read from reports/metrics.json.
+
+base: configs/final.yaml
+experiment: app
+
+app:
+  # Below this top-class probability the app says "uncertain". 0.5 = the model gives its top guess
+  # at least half the probability. Fixed as a round number, not tuned; src.app_confidence measures
+  # how it behaves on the CV out-of-fold predictions (never on the test set).
+  low_confidence_threshold: 0.5

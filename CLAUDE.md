@@ -39,8 +39,9 @@ This is a portfolio project for a Master's in AI application (NUS/NTU). The owne
 4. Skin-tone analysis: break down every metric by skin-tone group, with confidence intervals across 3+ seeds.
 5. Image-processing experiments: compare no augmentation vs. standard augmentation vs. color constancy vs. CLAHE. Report results overall and per skin tone in one table.
 6. Explainability: Grad-CAM heatmaps for correct and incorrect predictions across skin tones.
-7. Streamlit app: upload image, show prediction with confidence, Grad-CAM overlay, and a reliability note for that skin-tone group. Show a clear banner: "Educational demo, not a medical diagnosis."
-8. Write-up: README with problem, data, method, results tables, figures, limitations, and how to run.
+7. One-time test-set evaluation of the frozen method (done; guarded against reruns by `src/test_eval.py`).
+8. Streamlit app: upload image, show prediction with confidence, Grad-CAM overlay, and a reliability note for that skin-tone group. Show a clear banner: "Educational demo, not a medical diagnosis."
+9. Write-up: README with problem, data, method, results tables, figures, limitations, and how to run.
 
 ## Repo layout
 ```

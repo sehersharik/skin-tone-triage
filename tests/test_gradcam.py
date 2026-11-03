@@ -33,6 +33,16 @@ def test_gradcam_highlights_the_region_that_drives_the_class():
     assert cam_other.max() == 0
 
 
+def test_model_with_gradcam_still_predicts_without_gradients():
+    model, layer = toy_model()
+    cam_fn = GradCAM(model, layer)
+    x = torch.rand(1, 1, 8, 8)
+    with torch.no_grad():
+        probs = torch.softmax(model(x), dim=1)        # e.g. the app's prediction step
+    cam, cam_probs = cam_fn(x, int(probs.argmax()))
+    assert np.allclose(probs[0].numpy(), cam_probs) and cam.shape == (8, 8)
+
+
 def test_border_share():
     uniform = np.ones((100, 100))
     assert np.isclose(border_share(uniform, 0.1), 1 - 0.8 ** 2)

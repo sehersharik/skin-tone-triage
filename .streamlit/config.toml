@@ -1,0 +1,6 @@
+# Streamlit settings for the demo app
+[server]
+maxUploadSize = 10          # MB; phone photos are a few MB
+
+[browser]
+gatherUsageStats = false    # no usage statistics sent to Streamlit

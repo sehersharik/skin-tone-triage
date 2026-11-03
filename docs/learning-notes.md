@@ -298,3 +298,33 @@ the model mostly uses the skin, and when it is wrong, background and clothing ar
   it is one more reason the app's reliability note for darker skin must say plainly that the model is untested
   there.
 - Monk 7-10 has only 3 test cases, all dermatitis: no conclusion is possible, and AUC can't even be computed.
+
+## Phase 8: Streamlit demo app
+
+**What was built**
+
+- `app/streamlit_app.py`: upload a photo; see the top guess, the probabilities for all 6 conditions, a Grad-CAM
+  overlay and a reliability note. The page logic that can be tested lives in `src/app_logic.py`.
+- `src/app_confidence.py`: measures the app's "uncertain" rule on the CV out-of-fold predictions.
+
+**Why it was built this way**
+
+- *Every number comes from `reports/metrics.json`.* A test fails if a decimal, a percentage or a "6 conditions"
+  is typed into the page code, so the app can never drift away from the results.
+- *The same reliability note for everyone.* The app does not estimate skin tone from the photo: that would be
+  unreliable, and a wrong "your skin type is..." would be worse than none. Instead it states plainly that darker
+  skin is poorly tested.
+- *An "uncertain" state.* Below 50% top probability the app calls the result uncertain. 50% is a round number,
+  not tuned; how it behaves was measured on CV cases (never the test set): more than half of the cases fall below
+  it, and the model is right noticeably more often above it than below. A model that only knows 6 conditions will
+  still pick one for anything else, so the page says that too.
+- *The upload is prepared exactly like the training images*: fix the phone's rotation, resize the short side to
+  256 px, centre-crop 224x224. A demo that preprocesses differently from training quietly gets worse.
+- *Privacy:* photos are processed in memory and never written to disk; Streamlit's usage statistics are off.
+
+**What we learned**
+
+- Running the real app found a bug the tests had missed: once Grad-CAM was attached, a plain prediction without
+  gradients crashed. Phase 6 always ran with gradients, so its results were not affected. A test now covers it.
+- A photo the model was trained on gets a near-100% answer. That shows the page works, not that the model is
+  accurate; only the test-set numbers say that.

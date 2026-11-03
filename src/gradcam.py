@@ -58,7 +58,8 @@ class GradCAM:
 
     def _keep_activations(self, module, inputs, output):
         self.activations = output
-        output.register_hook(self._keep_gradients)
+        if output.requires_grad:   # not under torch.no_grad(), e.g. a plain prediction
+            output.register_hook(self._keep_gradients)
 
     def _keep_gradients(self, grad):
         self.gradients = grad

@@ -65,6 +65,18 @@ done
 python -m src.compare_settings --config configs/phase5/compare.yaml   # -> phase5_cv
 ```
 
+## Demo app (Streamlit, CPU)
+
+```bash
+python -m src.app_confidence --config configs/app.yaml   # CV behaviour of the "uncertain" rule -> metrics.json
+streamlit run app/streamlit_app.py
+```
+
+Upload a photo to see the predicted condition, the probabilities for all 6 classes, a Grad-CAM overlay and a
+reliability note. Every number on the page is read from `reports/metrics.json`. Photos are processed in memory and
+not saved. The app needs the model weights at `models/final_baseline.pt`; they are not in git (train them with
+`src.train_final`, see `configs/final.yaml`). Without them the app explains that it can't predict.
+
 ## Running on Kaggle
 
 `notebooks/kaggle_colab_runner.ipynb` clones this repo and runs the scripts for the phase set in its first cell.
