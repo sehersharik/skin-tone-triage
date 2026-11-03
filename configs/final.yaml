@@ -1,0 +1,31 @@
+# Phase 6: the frozen method and its Grad-CAM heatmaps.
+# Frozen method = the Phase 3 baseline (EfficientNet-B0, no augmentation, no preprocessing),
+# kept by the Phase 5 selection rule, with its 5-epoch budget (chosen in Phase 3 on fold 1).
+#
+# 1. src.train with this config: seed-42 out-of-fold predictions on the CV pool (they decide
+#    which cases are "correct" / "incorrect"; each case is predicted by a model that never saw it).
+# 2. src.train_final: one model trained on the whole CV pool, weights saved outside git.
+# 3. src.gradcam: heatmaps from that final model. The test set is never loaded.
+
+base: configs/baseline.yaml
+experiment: final_baseline
+
+paths:
+  predictions_csv: reports/predictions/final/baseline_seed42_oof.csv
+  fold_outputs_dir: reports/predictions/final/folds
+  train_log_json: reports/final/baseline_seed42_train_log.json
+  final_model: models/final_baseline.pt            # gitignored
+  final_model_info: models/final_baseline.json
+  gradcam_dir: reports/gradcam                     # gitignored: the grids show SCIN photos
+  gradcam_stats_csv: reports/predictions/gradcam_stats.csv   # one row per image (case ids: gitignored)
+
+train:
+  epochs: 5                    # frozen budget; no search
+
+gradcam:
+  target_layer: features.8     # the last convolutional block (1x1 conv 320 -> 1280, 7x7 output)
+  border_fraction: 0.1         # "border" = the outer 10% of the image on each side
+  cases_per_class: 1           # per FST group x correct/incorrect x class
+  cases_per_focus_class: 2
+  focus_classes: [psoriasis, tinea]
+  overlay_alpha: 0.5

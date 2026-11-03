@@ -12,7 +12,8 @@ runs/*
 !runs/README.md
 !runs/summaries/
 
-# Model weights
+# Model weights (the final model is saved under models/)
+models/
 *.pt
 *.pth
 *.ckpt
@@ -27,3 +28,6 @@ __pycache__/
 
 # Case-level predictions (one row per SCIN case) stay out of git
 reports/predictions/
+
+# Grad-CAM grids show SCIN photos: never committed (README: no SCIN images in this repo)
+reports/gradcam/
