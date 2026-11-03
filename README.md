@@ -3,7 +3,9 @@
 Classifies common skin conditions from photos with a fine-tuned CNN, explains predictions with Grad-CAM,
 and reports how performance varies across skin tones. Educational project, not a medical device.
 
-**Status:** Phase 3 (baseline) in progress. Results, method and limitations will be written up in Phase 8.
+**Status:** Phases 1-5 done; Phase 6 (Grad-CAM) in progress. The full results, method and limitations will be
+written up in Phase 8. Every number lives in `reports/metrics.json`; plain-English notes per phase are in
+[`docs/learning-notes.md`](docs/learning-notes.md).
 
 ## Setup
 
@@ -49,6 +51,42 @@ The test set is not used by any of these steps.
 
 Each finished fold is saved to `reports/predictions/baseline_folds/` (or `--fold-outputs-dir`); rerunning
 `src.train` after an interruption skips the saved folds and gives the same results.
+
+## Skin-tone analysis (Phase 4) and image-processing experiments (Phase 5)
+
+```bash
+python -m src.train --config configs/seeds.yaml                  # baseline, 3 seeds, same folds
+python -m src.image_factors --config configs/seeds.yaml          # brightness, contrast, sharpness, resolution
+python -m src.tone_analysis --config configs/seeds.yaml          # -> tone_analysis_cv in reports/metrics.json
+
+for s in none standard_aug shades_of_gray clahe; do
+  python -m src.train --config configs/phase5/$s.yaml            # epoch budget re-picked per setting
+done
+python -m src.compare_settings --config configs/phase5/compare.yaml   # -> phase5_cv
+```
+
+## Running on Kaggle
+
+`notebooks/kaggle_colab_runner.ipynb` clones this repo and runs the scripts for the phase set in its first cell.
+**Download the results zip from the version's Output tab and unzip it in the repo root. Do not use Kaggle's
+"Save to GitHub" sync for this notebook:** it commits the executed notebook (with all outputs) straight to
+`main`, which conflicts with local commits.
+
+## Findings so far (CV pool only; the test set has not been used)
+
+Numbers and confidence intervals for everything below are in `reports/metrics.json`.
+
+- **Frozen method: the baseline** (EfficientNet-B0, no augmentation, no preprocessing, 5 epochs). It was kept by a
+  selection rule written down before the Phase 5 results existed: a setting had to improve overall balanced
+  accuracy beyond the noise without making any skin-tone group worse. None did.
+- **Secondary finding: standard augmentation.** Compared with the baseline on the same cases, it improved macro F1,
+  macro AUC and psoriasis recall on light skin (FST I-II) beyond the noise, but it missed the pre-registered
+  primary metric (its overall balanced-accuracy gain was within the noise). It costs about 3x the training time,
+  and tinea recall dropped (borderline). It is documented here, not adopted.
+- **Colour constancy (Shades of Gray) and CLAHE** made no clear difference.
+- **Skin tone (Phase 4):** the baseline's lower balanced accuracy on FST I-II than on FST III-IV mostly disappears
+  once the condition is held fixed; what remains is borderline and comes mainly from psoriasis and tinea in
+  FST I-II. Photo quality doesn't explain it. The darkest groups are too small to draw conclusions.
 
 ## Explore
 

@@ -208,3 +208,12 @@ Plain-English notes on what was built in each phase and why.
 - Kaggle updated its PyTorch build between Phase 4 and Phase 5 (CUDA 12.8 to 13.0). The baseline rerun therefore
   differs from Phase 4 in the 7th decimal place of some probabilities: every predicted class and every metric is
   the same. Bit-for-bit reproducibility needs the same software as well as the same seed.
+
+**Decision**
+
+- The baseline is the frozen method, exactly as the pre-registered rule says. Augmentation is reported as a
+  secondary finding (better macro F1, AUC and light-skin psoriasis recall; missed the primary metric; 3x the
+  training time; tinea recall dropped), not adopted. Switching to it after seeing the results would be the kind
+  of choice the rule exists to prevent.
+- Workflow lesson: Kaggle's "Save to GitHub" sync committed the executed notebook to `main` and caused a push
+  conflict. Results now come back only as the downloaded zip.
