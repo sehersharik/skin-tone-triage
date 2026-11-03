@@ -1,0 +1,45 @@
+{
+  "seed": 42,
+  "classes": [
+    "dermatitis",
+    "folliculitis",
+    "insect_bite",
+    "psoriasis",
+    "tinea",
+    "urticaria"
+  ],
+  "n_cases": 928,
+  "n_images": 2054,
+  "epoch_budget": {
+    "selected": 15,
+    "source": "budget search",
+    "seed": 42,
+    "budget_fold": 0,
+    "metric": "case-level balanced accuracy",
+    "scores": {
+      "5": 0.5402,
+      "10": 0.5055,
+      "15": 0.5674,
+      "20": 0.4968
+    },
+    "seconds_per_candidate": {
+      "5": 51.8,
+      "10": 98.0,
+      "15": 146.7,
+      "20": 196.6
+    }
+  },
+  "timing": {
+    "device": "cuda",
+    "gpu": "Tesla T4",
+    "seconds_per_cv_fold": {
+      "0": 147.1,
+      "1": 145.6,
+      "2": 148.9,
+      "3": 145.9,
+      "4": 145.2
+    },
+    "mean_seconds_per_cv_fold": 146.5
+  },
+  "torch_version": "2.11.0+cu130"
+}

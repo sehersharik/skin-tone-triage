@@ -162,3 +162,49 @@ Plain-English notes on what was built in each phase and why.
   Photos of darker skin are darker overall (expected, since the skin is in the photo) and, unexpectedly, sharper.
 - The darkest groups (FST V-VI, Monk 7-10) show no sign of doing worse, but with 61 and 32 cases the confidence
   intervals are too wide to rule out a large gap in either direction. That is a limit of the data, not a finding.
+
+## Phase 5: Image-processing experiments
+
+**What was built**
+
+- `src/transforms.py`: two kinds of image processing, kept separate.
+  - *Preprocessing* is the same every time and is applied to every image, in training and evaluation, so the
+    model always sees images prepared the same way. **Shades of Gray** estimates the colour of the light (a
+    "power mean" of each colour channel) and rescales the channels so that light becomes neutral grey, which
+    removes colour casts from different phones and lamps. **CLAHE** boosts local contrast tile by tile, on the
+    lightness channel only so colours don't shift, with a clip limit so noise isn't amplified.
+  - *Augmentation* is random and used on training images only: small rotations, random crops, flips and mild
+    colour jitter. Each epoch the model sees slightly different versions of each photo, which makes memorising
+    them harder.
+- `configs/phase5/`: one shared base config and one small file per setting, so it is obvious that the four
+  settings differ in exactly one thing. Each setting changes one thing against the baseline (no combinations).
+- `src/compare_settings.py`: scores every setting on the same cases and compares it with the baseline using a
+  *paired* bootstrap: each resample of cases is scored under every setting, so differences between cases cancel
+  out and only the effect of the setting is left. That makes small real differences easier to see.
+
+**Why it was built this way**
+
+- *The epoch budget was re-picked for every setting* (on fold 1, seed 42, as in Phase 3). Augmentation changes
+  how fast a model overfits, so judging every setting at 5 epochs would have been unfair to augmentation.
+- *The rule for choosing the final setting was written into the config before any result existed*: a setting
+  wins only if it improves overall balanced accuracy beyond the noise and makes no skin-tone group worse beyond
+  the noise; otherwise the simplest setting (the baseline) stays. Fixing the rule first stops us from picking
+  whichever number happens to look best afterwards.
+- *Many comparisons* (60) are made, so about 3 can look "outside the noise" by chance alone. One isolated
+  result, especially in a small group, is weak evidence; a pattern across measures is stronger.
+
+**What we learned** (numbers in `reports/metrics.json`, `phase5_cv`)
+
+- **The rule keeps the baseline.** No setting improved overall balanced accuracy beyond the noise. This is a
+  negative result and is reported as such.
+- **Augmentation came closest and helped elsewhere.** Its overall balanced-accuracy gain just misses the bar, but
+  macro F1 and macro AUC improve beyond the noise, the three seeds agree with each other much more closely, and
+  the budget search shows it no longer overfits after 5 epochs (it chose 15). Most strikingly, it fixes part of
+  the Phase 4 weakness: psoriasis on FST I-II goes from almost never recognised to recognised about a fifth of the
+  time, which narrows the light-skin gap. The price: tinea recall tends to drop (borderline), and training takes
+  about three times longer.
+- **Shades of Gray and CLAHE made no clear difference.** CLAHE scored worse on FST V-VI beyond the noise, but
+  that is one result out of 60, on 61 cases, so it is weak evidence rather than a finding.
+- Kaggle updated its PyTorch build between Phase 4 and Phase 5 (CUDA 12.8 to 13.0). The baseline rerun therefore
+  differs from Phase 4 in the 7th decimal place of some probabilities: every predicted class and every metric is
+  the same. Bit-for-bit reproducibility needs the same software as well as the same seed.

@@ -2029,5 +2029,1575 @@
         }
       }
     }
+  },
+  "phase5_cv": {
+    "description": "Phase 5. Image-processing settings compared with the baseline on the same CV cases (out-of-fold, case level, seed mean). The test set was not used.",
+    "config": "configs/phase5/compare.yaml",
+    "settings": [
+      "p5_none",
+      "p5_standard_aug",
+      "p5_shades_of_gray",
+      "p5_clahe"
+    ],
+    "baseline": "p5_none",
+    "setting_configs": {
+      "p5_none": "configs/phase5/none.yaml",
+      "p5_standard_aug": "configs/phase5/standard_aug.yaml",
+      "p5_shades_of_gray": "configs/phase5/shades_of_gray.yaml",
+      "p5_clahe": "configs/phase5/clahe.yaml"
+    },
+    "images": {
+      "p5_none": {
+        "augmentation": "none",
+        "preprocessing": "none"
+      },
+      "p5_standard_aug": {
+        "augmentation": "standard",
+        "preprocessing": "none"
+      },
+      "p5_shades_of_gray": {
+        "augmentation": "none",
+        "preprocessing": "shades_of_gray"
+      },
+      "p5_clahe": {
+        "augmentation": "none",
+        "preprocessing": "clahe"
+      }
+    },
+    "seeds": [
+      42,
+      43,
+      44
+    ],
+    "focus_classes": [
+      "psoriasis",
+      "tinea"
+    ],
+    "min_cell_cases": 5,
+    "epoch_budget": {
+      "p5_none": {
+        "selected": 5,
+        "source": "budget search",
+        "seed": 42,
+        "budget_fold": 0,
+        "metric": "case-level balanced accuracy",
+        "scores": {
+          "5": 0.5071,
+          "10": 0.4166,
+          "15": 0.4283,
+          "20": 0.4337
+        },
+        "seconds_per_candidate": {
+          "5": 47.6,
+          "10": 93.5,
+          "15": 140.9,
+          "20": 188.9
+        }
+      },
+      "p5_standard_aug": {
+        "selected": 15,
+        "source": "budget search",
+        "seed": 42,
+        "budget_fold": 0,
+        "metric": "case-level balanced accuracy",
+        "scores": {
+          "5": 0.5402,
+          "10": 0.5055,
+          "15": 0.5674,
+          "20": 0.4968
+        },
+        "seconds_per_candidate": {
+          "5": 51.8,
+          "10": 98.0,
+          "15": 146.7,
+          "20": 196.6
+        }
+      },
+      "p5_shades_of_gray": {
+        "selected": 5,
+        "source": "budget search",
+        "seed": 42,
+        "budget_fold": 0,
+        "metric": "case-level balanced accuracy",
+        "scores": {
+          "5": 0.5238,
+          "10": 0.4934,
+          "15": 0.5152,
+          "20": 0.4665
+        },
+        "seconds_per_candidate": {
+          "5": 53.1,
+          "10": 100.3,
+          "15": 150.6,
+          "20": 200.5
+        }
+      },
+      "p5_clahe": {
+        "selected": 5,
+        "source": "budget search",
+        "seed": 42,
+        "budget_fold": 0,
+        "metric": "case-level balanced accuracy",
+        "scores": {
+          "5": 0.4912,
+          "10": 0.4238,
+          "15": 0.4351,
+          "20": 0.3998
+        },
+        "seconds_per_candidate": {
+          "5": 52.4,
+          "10": 99.6,
+          "15": 148.2,
+          "20": 197.1
+        }
+      }
+    },
+    "results": {
+      "overall": {
+        "p5_none": {
+          "n_cases": 928,
+          "balanced_accuracy": {
+            "mean": 0.3938,
+            "sd_over_seeds": 0.0336,
+            "per_seed": [
+              0.3806,
+              0.432,
+              0.3687
+            ],
+            "ci_low": 0.3618,
+            "ci_high": 0.4245
+          },
+          "macro_f1": {
+            "mean": 0.3673,
+            "sd_over_seeds": 0.0341,
+            "per_seed": [
+              0.3557,
+              0.4057,
+              0.3405
+            ],
+            "ci_low": 0.3366,
+            "ci_high": 0.3961
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7607,
+            "sd_over_seeds": 0.0152,
+            "per_seed": [
+              0.751,
+              0.7782,
+              0.753
+            ],
+            "ci_low": 0.7386,
+            "ci_high": 0.7812
+          },
+          "psoriasis_recall": {
+            "mean": 0.1699,
+            "sd_over_seeds": 0.0493,
+            "per_seed": [
+              0.1765,
+              0.2157,
+              0.1176
+            ],
+            "ci_low": 0.0894,
+            "ci_high": 0.2606,
+            "n_cases": 51,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "mean": 0.2109,
+            "sd_over_seeds": 0.0425,
+            "per_seed": [
+              0.2245,
+              0.2449,
+              0.1633
+            ],
+            "ci_low": 0.1309,
+            "ci_high": 0.303,
+            "n_cases": 49,
+            "reliable": true
+          }
+        },
+        "p5_standard_aug": {
+          "n_cases": 928,
+          "balanced_accuracy": {
+            "mean": 0.4169,
+            "sd_over_seeds": 0.0168,
+            "per_seed": [
+              0.4354,
+              0.413,
+              0.4024
+            ],
+            "ci_low": 0.3855,
+            "ci_high": 0.4493
+          },
+          "macro_f1": {
+            "mean": 0.4174,
+            "sd_over_seeds": 0.0146,
+            "per_seed": [
+              0.4326,
+              0.4162,
+              0.4035
+            ],
+            "ci_low": 0.3841,
+            "ci_high": 0.4491
+          },
+          "macro_auc_ovr": {
+            "mean": 0.8,
+            "sd_over_seeds": 0.0075,
+            "per_seed": [
+              0.7955,
+              0.7959,
+              0.8087
+            ],
+            "ci_low": 0.78,
+            "ci_high": 0.8197
+          },
+          "psoriasis_recall": {
+            "mean": 0.281,
+            "sd_over_seeds": 0.063,
+            "per_seed": [
+              0.3529,
+              0.2353,
+              0.2549
+            ],
+            "ci_low": 0.1895,
+            "ci_high": 0.3819,
+            "n_cases": 51,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "mean": 0.1293,
+            "sd_over_seeds": 0.0118,
+            "per_seed": [
+              0.1224,
+              0.1429,
+              0.1224
+            ],
+            "ci_low": 0.0631,
+            "ci_high": 0.2074,
+            "n_cases": 49,
+            "reliable": true
+          }
+        },
+        "p5_shades_of_gray": {
+          "n_cases": 928,
+          "balanced_accuracy": {
+            "mean": 0.4093,
+            "sd_over_seeds": 0.0347,
+            "per_seed": [
+              0.3931,
+              0.4492,
+              0.3857
+            ],
+            "ci_low": 0.3773,
+            "ci_high": 0.4424
+          },
+          "macro_f1": {
+            "mean": 0.3834,
+            "sd_over_seeds": 0.034,
+            "per_seed": [
+              0.3666,
+              0.4226,
+              0.3611
+            ],
+            "ci_low": 0.3516,
+            "ci_high": 0.4136
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7558,
+            "sd_over_seeds": 0.0186,
+            "per_seed": [
+              0.7529,
+              0.7757,
+              0.7387
+            ],
+            "ci_low": 0.7332,
+            "ci_high": 0.7771
+          },
+          "psoriasis_recall": {
+            "mean": 0.1895,
+            "sd_over_seeds": 0.0453,
+            "per_seed": [
+              0.2157,
+              0.2157,
+              0.1373
+            ],
+            "ci_low": 0.109,
+            "ci_high": 0.2778,
+            "n_cases": 51,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "mean": 0.2177,
+            "sd_over_seeds": 0.0623,
+            "per_seed": [
+              0.1633,
+              0.2857,
+              0.2041
+            ],
+            "ci_low": 0.1212,
+            "ci_high": 0.3254,
+            "n_cases": 49,
+            "reliable": true
+          }
+        },
+        "p5_clahe": {
+          "n_cases": 928,
+          "balanced_accuracy": {
+            "mean": 0.4045,
+            "sd_over_seeds": 0.0372,
+            "per_seed": [
+              0.3991,
+              0.4441,
+              0.3703
+            ],
+            "ci_low": 0.3722,
+            "ci_high": 0.436
+          },
+          "macro_f1": {
+            "mean": 0.3839,
+            "sd_over_seeds": 0.0338,
+            "per_seed": [
+              0.3772,
+              0.4206,
+              0.354
+            ],
+            "ci_low": 0.3522,
+            "ci_high": 0.4137
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7638,
+            "sd_over_seeds": 0.0125,
+            "per_seed": [
+              0.7571,
+              0.7782,
+              0.7561
+            ],
+            "ci_low": 0.7422,
+            "ci_high": 0.7852
+          },
+          "psoriasis_recall": {
+            "mean": 0.2026,
+            "sd_over_seeds": 0.0689,
+            "per_seed": [
+              0.1961,
+              0.2745,
+              0.1373
+            ],
+            "ci_low": 0.1131,
+            "ci_high": 0.3023,
+            "n_cases": 51,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "mean": 0.1633,
+            "sd_over_seeds": 0.0408,
+            "per_seed": [
+              0.1633,
+              0.2041,
+              0.1224
+            ],
+            "ci_low": 0.0922,
+            "ci_high": 0.246,
+            "n_cases": 49,
+            "reliable": true
+          }
+        }
+      },
+      "FST I-II": {
+        "p5_none": {
+          "n_cases": 402,
+          "balanced_accuracy": {
+            "mean": 0.3411,
+            "sd_over_seeds": 0.0448,
+            "per_seed": [
+              0.3109,
+              0.3926,
+              0.3199
+            ],
+            "ci_low": 0.2986,
+            "ci_high": 0.3852
+          },
+          "macro_f1": {
+            "mean": 0.3077,
+            "sd_over_seeds": 0.0402,
+            "per_seed": [
+              0.2844,
+              0.3541,
+              0.2847
+            ],
+            "ci_low": 0.2678,
+            "ci_high": 0.3449
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7281,
+            "sd_over_seeds": 0.0164,
+            "per_seed": [
+              0.7224,
+              0.7465,
+              0.7152
+            ],
+            "ci_low": 0.6934,
+            "ci_high": 0.7608
+          },
+          "psoriasis_recall": {
+            "mean": 0.0185,
+            "sd_over_seeds": 0.0321,
+            "per_seed": [
+              0.0556,
+              0.0,
+              0.0
+            ],
+            "ci_low": 0.0,
+            "ci_high": 0.0625,
+            "n_cases": 18,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "mean": 0.15,
+            "sd_over_seeds": 0.0866,
+            "per_seed": [
+              0.1,
+              0.25,
+              0.1
+            ],
+            "ci_low": 0.0417,
+            "ci_high": 0.2833,
+            "n_cases": 20,
+            "reliable": true
+          }
+        },
+        "p5_standard_aug": {
+          "n_cases": 402,
+          "balanced_accuracy": {
+            "mean": 0.3861,
+            "sd_over_seeds": 0.0126,
+            "per_seed": [
+              0.3953,
+              0.3913,
+              0.3718
+            ],
+            "ci_low": 0.3387,
+            "ci_high": 0.4326
+          },
+          "macro_f1": {
+            "mean": 0.3891,
+            "sd_over_seeds": 0.0131,
+            "per_seed": [
+              0.3968,
+              0.3965,
+              0.374
+            ],
+            "ci_low": 0.3384,
+            "ci_high": 0.4317
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7835,
+            "sd_over_seeds": 0.0126,
+            "per_seed": [
+              0.7754,
+              0.7772,
+              0.798
+            ],
+            "ci_low": 0.7491,
+            "ci_high": 0.8166
+          },
+          "psoriasis_recall": {
+            "mean": 0.2222,
+            "sd_over_seeds": 0.0556,
+            "per_seed": [
+              0.2778,
+              0.1667,
+              0.2222
+            ],
+            "ci_low": 0.0952,
+            "ci_high": 0.3636,
+            "n_cases": 18,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "mean": 0.1167,
+            "sd_over_seeds": 0.0289,
+            "per_seed": [
+              0.1,
+              0.15,
+              0.1
+            ],
+            "ci_low": 0.0317,
+            "ci_high": 0.2222,
+            "n_cases": 20,
+            "reliable": true
+          }
+        },
+        "p5_shades_of_gray": {
+          "n_cases": 402,
+          "balanced_accuracy": {
+            "mean": 0.3408,
+            "sd_over_seeds": 0.0198,
+            "per_seed": [
+              0.3249,
+              0.363,
+              0.3346
+            ],
+            "ci_low": 0.2958,
+            "ci_high": 0.3837
+          },
+          "macro_f1": {
+            "mean": 0.3102,
+            "sd_over_seeds": 0.0214,
+            "per_seed": [
+              0.2925,
+              0.334,
+              0.3041
+            ],
+            "ci_low": 0.2682,
+            "ci_high": 0.3479
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7258,
+            "sd_over_seeds": 0.0254,
+            "per_seed": [
+              0.7376,
+              0.7431,
+              0.6967
+            ],
+            "ci_low": 0.6923,
+            "ci_high": 0.7569
+          },
+          "psoriasis_recall": {
+            "mean": 0.0185,
+            "sd_over_seeds": 0.0321,
+            "per_seed": [
+              0.0556,
+              0.0,
+              0.0
+            ],
+            "ci_low": 0.0,
+            "ci_high": 0.0625,
+            "n_cases": 18,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "mean": 0.1167,
+            "sd_over_seeds": 0.0764,
+            "per_seed": [
+              0.05,
+              0.2,
+              0.1
+            ],
+            "ci_low": 0.0167,
+            "ci_high": 0.2444,
+            "n_cases": 20,
+            "reliable": true
+          }
+        },
+        "p5_clahe": {
+          "n_cases": 402,
+          "balanced_accuracy": {
+            "mean": 0.3605,
+            "sd_over_seeds": 0.0385,
+            "per_seed": [
+              0.3525,
+              0.4023,
+              0.3267
+            ],
+            "ci_low": 0.3168,
+            "ci_high": 0.4023
+          },
+          "macro_f1": {
+            "mean": 0.3293,
+            "sd_over_seeds": 0.0359,
+            "per_seed": [
+              0.3206,
+              0.3689,
+              0.2986
+            ],
+            "ci_low": 0.289,
+            "ci_high": 0.3651
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7381,
+            "sd_over_seeds": 0.0172,
+            "per_seed": [
+              0.7414,
+              0.7535,
+              0.7196
+            ],
+            "ci_low": 0.7035,
+            "ci_high": 0.7707
+          },
+          "psoriasis_recall": {
+            "mean": 0.0556,
+            "sd_over_seeds": 0.0556,
+            "per_seed": [
+              0.1111,
+              0.0556,
+              0.0
+            ],
+            "ci_low": 0.0,
+            "ci_high": 0.1481,
+            "n_cases": 18,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "mean": 0.1,
+            "sd_over_seeds": 0.0866,
+            "per_seed": [
+              0.05,
+              0.2,
+              0.05
+            ],
+            "ci_low": 0.0208,
+            "ci_high": 0.1905,
+            "n_cases": 20,
+            "reliable": true
+          }
+        }
+      },
+      "FST III-IV": {
+        "p5_none": {
+          "n_cases": 425,
+          "balanced_accuracy": {
+            "mean": 0.4451,
+            "sd_over_seeds": 0.0274,
+            "per_seed": [
+              0.4477,
+              0.4711,
+              0.4165
+            ],
+            "ci_low": 0.3943,
+            "ci_high": 0.4939
+          },
+          "macro_f1": {
+            "mean": 0.4251,
+            "sd_over_seeds": 0.0268,
+            "per_seed": [
+              0.4255,
+              0.4517,
+              0.398
+            ],
+            "ci_low": 0.3749,
+            "ci_high": 0.468
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7955,
+            "sd_over_seeds": 0.013,
+            "per_seed": [
+              0.786,
+              0.8103,
+              0.7901
+            ],
+            "ci_low": 0.7649,
+            "ci_high": 0.8251
+          },
+          "psoriasis_recall": {
+            "mean": 0.2976,
+            "sd_over_seeds": 0.0899,
+            "per_seed": [
+              0.2857,
+              0.3929,
+              0.2143
+            ],
+            "ci_low": 0.1667,
+            "ci_high": 0.4286,
+            "n_cases": 28,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "mean": 0.303,
+            "sd_over_seeds": 0.0525,
+            "per_seed": [
+              0.3636,
+              0.2727,
+              0.2727
+            ],
+            "ci_low": 0.1667,
+            "ci_high": 0.45,
+            "n_cases": 22,
+            "reliable": true
+          }
+        },
+        "p5_standard_aug": {
+          "n_cases": 425,
+          "balanced_accuracy": {
+            "mean": 0.4481,
+            "sd_over_seeds": 0.0222,
+            "per_seed": [
+              0.4735,
+              0.4324,
+              0.4382
+            ],
+            "ci_low": 0.403,
+            "ci_high": 0.4962
+          },
+          "macro_f1": {
+            "mean": 0.4513,
+            "sd_over_seeds": 0.0169,
+            "per_seed": [
+              0.4707,
+              0.4398,
+              0.4435
+            ],
+            "ci_low": 0.4013,
+            "ci_high": 0.4971
+          },
+          "macro_auc_ovr": {
+            "mean": 0.8197,
+            "sd_over_seeds": 0.0086,
+            "per_seed": [
+              0.8097,
+              0.8243,
+              0.825
+            ],
+            "ci_low": 0.79,
+            "ci_high": 0.8485
+          },
+          "psoriasis_recall": {
+            "mean": 0.3452,
+            "sd_over_seeds": 0.0743,
+            "per_seed": [
+              0.4286,
+              0.2857,
+              0.3214
+            ],
+            "ci_low": 0.2051,
+            "ci_high": 0.5,
+            "n_cases": 28,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "mean": 0.1818,
+            "sd_over_seeds": 0.0,
+            "per_seed": [
+              0.1818,
+              0.1818,
+              0.1818
+            ],
+            "ci_low": 0.0667,
+            "ci_high": 0.3182,
+            "n_cases": 22,
+            "reliable": true
+          }
+        },
+        "p5_shades_of_gray": {
+          "n_cases": 425,
+          "balanced_accuracy": {
+            "mean": 0.4667,
+            "sd_over_seeds": 0.0503,
+            "per_seed": [
+              0.4567,
+              0.5212,
+              0.4222
+            ],
+            "ci_low": 0.415,
+            "ci_high": 0.5173
+          },
+          "macro_f1": {
+            "mean": 0.4441,
+            "sd_over_seeds": 0.0489,
+            "per_seed": [
+              0.4388,
+              0.4954,
+              0.3981
+            ],
+            "ci_low": 0.3922,
+            "ci_high": 0.4878
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7884,
+            "sd_over_seeds": 0.0188,
+            "per_seed": [
+              0.7803,
+              0.8099,
+              0.775
+            ],
+            "ci_low": 0.7569,
+            "ci_high": 0.8187
+          },
+          "psoriasis_recall": {
+            "mean": 0.2857,
+            "sd_over_seeds": 0.0945,
+            "per_seed": [
+              0.3214,
+              0.3571,
+              0.1786
+            ],
+            "ci_low": 0.1587,
+            "ci_high": 0.4167,
+            "n_cases": 28,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "mean": 0.3636,
+            "sd_over_seeds": 0.0455,
+            "per_seed": [
+              0.3182,
+              0.4091,
+              0.3636
+            ],
+            "ci_low": 0.2,
+            "ci_high": 0.5417,
+            "n_cases": 22,
+            "reliable": true
+          }
+        },
+        "p5_clahe": {
+          "n_cases": 425,
+          "balanced_accuracy": {
+            "mean": 0.4546,
+            "sd_over_seeds": 0.0393,
+            "per_seed": [
+              0.4574,
+              0.4925,
+              0.414
+            ],
+            "ci_low": 0.4041,
+            "ci_high": 0.5011
+          },
+          "macro_f1": {
+            "mean": 0.4411,
+            "sd_over_seeds": 0.037,
+            "per_seed": [
+              0.4425,
+              0.4774,
+              0.4035
+            ],
+            "ci_low": 0.3899,
+            "ci_high": 0.4848
+          },
+          "macro_auc_ovr": {
+            "mean": 0.794,
+            "sd_over_seeds": 0.0087,
+            "per_seed": [
+              0.7876,
+              0.8039,
+              0.7905
+            ],
+            "ci_low": 0.763,
+            "ci_high": 0.8244
+          },
+          "psoriasis_recall": {
+            "mean": 0.3214,
+            "sd_over_seeds": 0.0945,
+            "per_seed": [
+              0.2857,
+              0.4286,
+              0.25
+            ],
+            "ci_low": 0.1746,
+            "ci_high": 0.4783,
+            "n_cases": 28,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "mean": 0.2727,
+            "sd_over_seeds": 0.0455,
+            "per_seed": [
+              0.3182,
+              0.2727,
+              0.2273
+            ],
+            "ci_low": 0.1458,
+            "ci_high": 0.4167,
+            "n_cases": 22,
+            "reliable": true
+          }
+        }
+      },
+      "FST V-VI": {
+        "p5_none": {
+          "n_cases": 61,
+          "balanced_accuracy": {
+            "mean": 0.4431,
+            "sd_over_seeds": 0.0161,
+            "per_seed": [
+              0.4468,
+              0.4569,
+              0.4255
+            ],
+            "ci_low": 0.3004,
+            "ci_high": 0.6378
+          },
+          "macro_f1": {
+            "mean": 0.3898,
+            "sd_over_seeds": 0.0401,
+            "per_seed": [
+              0.3881,
+              0.4307,
+              0.3505
+            ],
+            "ci_low": 0.2402,
+            "ci_high": 0.5429
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7726,
+            "sd_over_seeds": 0.0108,
+            "per_seed": [
+              0.7713,
+              0.7624,
+              0.784
+            ],
+            "ci_low": 0.6854,
+            "ci_high": 0.8653
+          },
+          "psoriasis_recall": {
+            "mean": 0.0,
+            "sd_over_seeds": 0.0,
+            "per_seed": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_cases": 2,
+            "reliable": false
+          },
+          "tinea_recall": {
+            "mean": 0.1667,
+            "sd_over_seeds": 0.1443,
+            "per_seed": [
+              0.25,
+              0.25,
+              0.0
+            ],
+            "ci_low": 0.0,
+            "ci_high": 0.3333,
+            "n_cases": 4,
+            "reliable": false
+          }
+        },
+        "p5_standard_aug": {
+          "n_cases": 61,
+          "balanced_accuracy": {
+            "mean": 0.4173,
+            "sd_over_seeds": 0.0441,
+            "per_seed": [
+              0.4681,
+              0.3949,
+              0.3889
+            ],
+            "ci_low": 0.2639,
+            "ci_high": 0.5911
+          },
+          "macro_f1": {
+            "mean": 0.3674,
+            "sd_over_seeds": 0.0709,
+            "per_seed": [
+              0.4492,
+              0.325,
+              0.328
+            ],
+            "ci_low": 0.2396,
+            "ci_high": 0.489
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7628,
+            "sd_over_seeds": 0.0561,
+            "per_seed": [
+              0.7797,
+              0.7002,
+              0.8086
+            ],
+            "ci_low": 0.6757,
+            "ci_high": 0.8515
+          },
+          "psoriasis_recall": {
+            "mean": 0.1667,
+            "sd_over_seeds": 0.2887,
+            "per_seed": [
+              0.5,
+              0.0,
+              0.0
+            ],
+            "ci_low": 0.0,
+            "ci_high": 0.3333,
+            "n_cases": 2,
+            "reliable": false
+          },
+          "tinea_recall": {
+            "mean": 0.0,
+            "sd_over_seeds": 0.0,
+            "per_seed": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_cases": 4,
+            "reliable": false
+          }
+        },
+        "p5_shades_of_gray": {
+          "n_cases": 61,
+          "balanced_accuracy": {
+            "mean": 0.4093,
+            "sd_over_seeds": 0.1001,
+            "per_seed": [
+              0.2991,
+              0.4343,
+              0.4944
+            ],
+            "ci_low": 0.2826,
+            "ci_high": 0.5543
+          },
+          "macro_f1": {
+            "mean": 0.3496,
+            "sd_over_seeds": 0.0972,
+            "per_seed": [
+              0.2375,
+              0.4106,
+              0.4006
+            ],
+            "ci_low": 0.2362,
+            "ci_high": 0.4576
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7658,
+            "sd_over_seeds": 0.0135,
+            "per_seed": [
+              0.7814,
+              0.7584,
+              0.7576
+            ],
+            "ci_low": 0.6783,
+            "ci_high": 0.8531
+          },
+          "psoriasis_recall": {
+            "mean": 0.1667,
+            "sd_over_seeds": 0.2887,
+            "per_seed": [
+              0.0,
+              0.0,
+              0.5
+            ],
+            "ci_low": 0.0,
+            "ci_high": 0.3333,
+            "n_cases": 2,
+            "reliable": false
+          },
+          "tinea_recall": {
+            "mean": 0.0833,
+            "sd_over_seeds": 0.1443,
+            "per_seed": [
+              0.0,
+              0.25,
+              0.0
+            ],
+            "ci_low": 0.0,
+            "ci_high": 0.3333,
+            "n_cases": 4,
+            "reliable": false
+          }
+        },
+        "p5_clahe": {
+          "n_cases": 61,
+          "balanced_accuracy": {
+            "mean": 0.366,
+            "sd_over_seeds": 0.0627,
+            "per_seed": [
+              0.2944,
+              0.3926,
+              0.4111
+            ],
+            "ci_low": 0.2506,
+            "ci_high": 0.5235
+          },
+          "macro_f1": {
+            "mean": 0.3144,
+            "sd_over_seeds": 0.0597,
+            "per_seed": [
+              0.2519,
+              0.3709,
+              0.3204
+            ],
+            "ci_low": 0.2062,
+            "ci_high": 0.4322
+          },
+          "macro_auc_ovr": {
+            "mean": 0.7644,
+            "sd_over_seeds": 0.0282,
+            "per_seed": [
+              0.732,
+              0.7792,
+              0.7822
+            ],
+            "ci_low": 0.6715,
+            "ci_high": 0.8556
+          },
+          "psoriasis_recall": {
+            "mean": 0.0,
+            "sd_over_seeds": 0.0,
+            "per_seed": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_cases": 2,
+            "reliable": false
+          },
+          "tinea_recall": {
+            "mean": 0.0,
+            "sd_over_seeds": 0.0,
+            "per_seed": [
+              0.0,
+              0.0,
+              0.0
+            ],
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "n_cases": 4,
+            "reliable": false
+          }
+        }
+      }
+    },
+    "paired_vs_baseline": {
+      "overall": {
+        "p5_standard_aug": {
+          "balanced_accuracy": {
+            "difference": 0.0232,
+            "ci_low": -0.0057,
+            "ci_high": 0.0504,
+            "outside_noise": false
+          },
+          "macro_f1": {
+            "difference": 0.0501,
+            "ci_low": 0.0221,
+            "ci_high": 0.0775,
+            "outside_noise": true
+          },
+          "macro_auc_ovr": {
+            "difference": 0.0393,
+            "ci_low": 0.0238,
+            "ci_high": 0.0539,
+            "outside_noise": true
+          },
+          "psoriasis_recall": {
+            "difference": 0.1111,
+            "ci_low": 0.019,
+            "ci_high": 0.2026,
+            "outside_noise": true,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "difference": -0.0816,
+            "ci_low": -0.1667,
+            "ci_high": 0.0,
+            "outside_noise": false,
+            "reliable": true
+          }
+        },
+        "p5_shades_of_gray": {
+          "balanced_accuracy": {
+            "difference": 0.0156,
+            "ci_low": -0.0027,
+            "ci_high": 0.0355,
+            "outside_noise": false
+          },
+          "macro_f1": {
+            "difference": 0.0162,
+            "ci_low": -0.0014,
+            "ci_high": 0.0351,
+            "outside_noise": false
+          },
+          "macro_auc_ovr": {
+            "difference": -0.005,
+            "ci_low": -0.0153,
+            "ci_high": 0.005,
+            "outside_noise": false
+          },
+          "psoriasis_recall": {
+            "difference": 0.0196,
+            "ci_low": -0.037,
+            "ci_high": 0.0734,
+            "outside_noise": false,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "difference": 0.0068,
+            "ci_low": -0.0513,
+            "ci_high": 0.0725,
+            "outside_noise": false,
+            "reliable": true
+          }
+        },
+        "p5_clahe": {
+          "balanced_accuracy": {
+            "difference": 0.0107,
+            "ci_low": -0.0077,
+            "ci_high": 0.0301,
+            "outside_noise": false
+          },
+          "macro_f1": {
+            "difference": 0.0167,
+            "ci_low": -0.0012,
+            "ci_high": 0.035,
+            "outside_noise": false
+          },
+          "macro_auc_ovr": {
+            "difference": 0.0031,
+            "ci_low": -0.0052,
+            "ci_high": 0.0113,
+            "outside_noise": false
+          },
+          "psoriasis_recall": {
+            "difference": 0.0327,
+            "ci_low": -0.0078,
+            "ci_high": 0.0741,
+            "outside_noise": false,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "difference": -0.0476,
+            "ci_low": -0.1157,
+            "ci_high": 0.018,
+            "outside_noise": false,
+            "reliable": true
+          }
+        }
+      },
+      "FST I-II": {
+        "p5_standard_aug": {
+          "balanced_accuracy": {
+            "difference": 0.045,
+            "ci_low": 0.0015,
+            "ci_high": 0.0889,
+            "outside_noise": true
+          },
+          "macro_f1": {
+            "difference": 0.0814,
+            "ci_low": 0.0362,
+            "ci_high": 0.1232,
+            "outside_noise": true
+          },
+          "macro_auc_ovr": {
+            "difference": 0.0555,
+            "ci_low": 0.0296,
+            "ci_high": 0.0807,
+            "outside_noise": true
+          },
+          "psoriasis_recall": {
+            "difference": 0.2037,
+            "ci_low": 0.0741,
+            "ci_high": 0.3542,
+            "outside_noise": true,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "difference": -0.0333,
+            "ci_low": -0.1429,
+            "ci_high": 0.0667,
+            "outside_noise": false,
+            "reliable": true
+          }
+        },
+        "p5_shades_of_gray": {
+          "balanced_accuracy": {
+            "difference": -0.0003,
+            "ci_low": -0.0259,
+            "ci_high": 0.0241,
+            "outside_noise": false
+          },
+          "macro_f1": {
+            "difference": 0.0025,
+            "ci_low": -0.0182,
+            "ci_high": 0.0231,
+            "outside_noise": false
+          },
+          "macro_auc_ovr": {
+            "difference": -0.0022,
+            "ci_low": -0.0194,
+            "ci_high": 0.0144,
+            "outside_noise": false
+          },
+          "psoriasis_recall": {
+            "difference": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "outside_noise": false,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "difference": -0.0333,
+            "ci_low": -0.1,
+            "ci_high": 0.0303,
+            "outside_noise": false,
+            "reliable": true
+          }
+        },
+        "p5_clahe": {
+          "balanced_accuracy": {
+            "difference": 0.0194,
+            "ci_low": -0.0141,
+            "ci_high": 0.0493,
+            "outside_noise": false
+          },
+          "macro_f1": {
+            "difference": 0.0216,
+            "ci_low": -0.0081,
+            "ci_high": 0.0485,
+            "outside_noise": false
+          },
+          "macro_auc_ovr": {
+            "difference": 0.0101,
+            "ci_low": -0.0044,
+            "ci_high": 0.0253,
+            "outside_noise": false
+          },
+          "psoriasis_recall": {
+            "difference": 0.037,
+            "ci_low": 0.0,
+            "ci_high": 0.0934,
+            "outside_noise": false,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "difference": -0.05,
+            "ci_low": -0.1755,
+            "ci_high": 0.0357,
+            "outside_noise": false,
+            "reliable": true
+          }
+        }
+      },
+      "FST III-IV": {
+        "p5_standard_aug": {
+          "balanced_accuracy": {
+            "difference": 0.003,
+            "ci_low": -0.0386,
+            "ci_high": 0.0455,
+            "outside_noise": false
+          },
+          "macro_f1": {
+            "difference": 0.0262,
+            "ci_low": -0.0161,
+            "ci_high": 0.0676,
+            "outside_noise": false
+          },
+          "macro_auc_ovr": {
+            "difference": 0.0242,
+            "ci_low": 0.0035,
+            "ci_high": 0.0451,
+            "outside_noise": true
+          },
+          "psoriasis_recall": {
+            "difference": 0.0476,
+            "ci_low": -0.0833,
+            "ci_high": 0.1754,
+            "outside_noise": false,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "difference": -0.1212,
+            "ci_low": -0.2807,
+            "ci_high": 0.0256,
+            "outside_noise": false,
+            "reliable": true
+          }
+        },
+        "p5_shades_of_gray": {
+          "balanced_accuracy": {
+            "difference": 0.0216,
+            "ci_low": -0.0108,
+            "ci_high": 0.0536,
+            "outside_noise": false
+          },
+          "macro_f1": {
+            "difference": 0.0191,
+            "ci_low": -0.0112,
+            "ci_high": 0.0491,
+            "outside_noise": false
+          },
+          "macro_auc_ovr": {
+            "difference": -0.0071,
+            "ci_low": -0.0215,
+            "ci_high": 0.0071,
+            "outside_noise": false
+          },
+          "psoriasis_recall": {
+            "difference": -0.0119,
+            "ci_low": -0.1,
+            "ci_high": 0.0714,
+            "outside_noise": false,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "difference": 0.0606,
+            "ci_low": -0.0625,
+            "ci_high": 0.1795,
+            "outside_noise": false,
+            "reliable": true
+          }
+        },
+        "p5_clahe": {
+          "balanced_accuracy": {
+            "difference": 0.0095,
+            "ci_low": -0.0182,
+            "ci_high": 0.0362,
+            "outside_noise": false
+          },
+          "macro_f1": {
+            "difference": 0.0161,
+            "ci_low": -0.0108,
+            "ci_high": 0.0413,
+            "outside_noise": false
+          },
+          "macro_auc_ovr": {
+            "difference": -0.0015,
+            "ci_low": -0.0123,
+            "ci_high": 0.009,
+            "outside_noise": false
+          },
+          "psoriasis_recall": {
+            "difference": 0.0238,
+            "ci_low": -0.0417,
+            "ci_high": 0.0889,
+            "outside_noise": false,
+            "reliable": true
+          },
+          "tinea_recall": {
+            "difference": -0.0303,
+            "ci_low": -0.1389,
+            "ci_high": 0.0695,
+            "outside_noise": false,
+            "reliable": true
+          }
+        }
+      },
+      "FST V-VI": {
+        "p5_standard_aug": {
+          "balanced_accuracy": {
+            "difference": -0.0258,
+            "ci_low": -0.1187,
+            "ci_high": 0.047,
+            "outside_noise": false
+          },
+          "macro_f1": {
+            "difference": -0.0224,
+            "ci_low": -0.1219,
+            "ci_high": 0.065,
+            "outside_noise": false
+          },
+          "macro_auc_ovr": {
+            "difference": -0.0098,
+            "ci_low": -0.0581,
+            "ci_high": 0.0443,
+            "outside_noise": false
+          },
+          "psoriasis_recall": {
+            "difference": 0.1667,
+            "ci_low": 0.0,
+            "ci_high": 0.3333,
+            "outside_noise": false,
+            "reliable": false
+          },
+          "tinea_recall": {
+            "difference": -0.1667,
+            "ci_low": -0.3333,
+            "ci_high": 0.0,
+            "outside_noise": false,
+            "reliable": false
+          }
+        },
+        "p5_shades_of_gray": {
+          "balanced_accuracy": {
+            "difference": -0.0338,
+            "ci_low": -0.1145,
+            "ci_high": 0.0399,
+            "outside_noise": false
+          },
+          "macro_f1": {
+            "difference": -0.0402,
+            "ci_low": -0.1185,
+            "ci_high": 0.0393,
+            "outside_noise": false
+          },
+          "macro_auc_ovr": {
+            "difference": -0.0068,
+            "ci_low": -0.0525,
+            "ci_high": 0.0437,
+            "outside_noise": false
+          },
+          "psoriasis_recall": {
+            "difference": 0.1667,
+            "ci_low": 0.0,
+            "ci_high": 0.3333,
+            "outside_noise": false,
+            "reliable": false
+          },
+          "tinea_recall": {
+            "difference": -0.0833,
+            "ci_low": -0.3333,
+            "ci_high": 0.0,
+            "outside_noise": false,
+            "reliable": false
+          }
+        },
+        "p5_clahe": {
+          "balanced_accuracy": {
+            "difference": -0.077,
+            "ci_low": -0.1487,
+            "ci_high": -0.0117,
+            "outside_noise": true
+          },
+          "macro_f1": {
+            "difference": -0.0754,
+            "ci_low": -0.1373,
+            "ci_high": -0.0069,
+            "outside_noise": true
+          },
+          "macro_auc_ovr": {
+            "difference": -0.0081,
+            "ci_low": -0.0498,
+            "ci_high": 0.0306,
+            "outside_noise": false
+          },
+          "psoriasis_recall": {
+            "difference": 0.0,
+            "ci_low": 0.0,
+            "ci_high": 0.0,
+            "outside_noise": false,
+            "reliable": false
+          },
+          "tinea_recall": {
+            "difference": -0.1667,
+            "ci_low": -0.3333,
+            "ci_high": 0.0,
+            "outside_noise": false,
+            "reliable": false
+          }
+        }
+      }
+    },
+    "selection": {
+      "selected": "p5_none",
+      "reason": "no setting improves overall balanced_accuracy over the baseline outside the noise (without hurting an FST group), so the simplest setting is kept",
+      "per_setting": {
+        "p5_standard_aug": {
+          "overall_gain": 0.0232,
+          "gain_outside_noise": false,
+          "fst_groups_worse_outside_noise": [],
+          "qualifies": false
+        },
+        "p5_shades_of_gray": {
+          "overall_gain": 0.0156,
+          "gain_outside_noise": false,
+          "fst_groups_worse_outside_noise": [],
+          "qualifies": false
+        },
+        "p5_clahe": {
+          "overall_gain": 0.0107,
+          "gain_outside_noise": false,
+          "fst_groups_worse_outside_noise": [
+            "FST V-VI"
+          ],
+          "qualifies": false
+        }
+      }
+    },
+    "multiple_comparisons_note": "60 paired comparisons are reported. At a 95% level about 1 in 20 differences with no real effect will still look outside the noise, so a single isolated 'outside the noise' result, especially in a small group, is weak evidence."
   }
 }
